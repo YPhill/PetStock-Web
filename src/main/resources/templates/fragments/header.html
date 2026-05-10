@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <!-- Fragmento reutilizável do cabeçalho -->
+    <header th:fragment="header" class="topo">
+
+        <!-- Faixa superior com logo e nome do sistema -->
+        <div class="topo-logo">
+
+            <div class="logo-area">
+
+                <!-- Ícone provisório até colocarmos a imagem oficial -->
+                <span class="logo-icone">🐶</span>
+
+                <!-- Nome do sistema -->
+                <span class="logo-texto">PETSTOCK</span>
+
+            </div>
+
+        </div>
+
+        <!-- Menu principal do sistema -->
+        <nav class="menu">
+
+            <a href="/">Início</a>
+            <a href="/clientes">Cliente</a>
+            <a href="/fornecedores">Fornecedor</a>
+            <a href="/produtos">Produtos</a>
+            <a href="/estoque">Estoque</a>
+            <a href="/vendas">Vendas</a>
+            <a href="/relatorios">Relatórios</a>
+
+        </nav>
+
+    </header>
+
+</body>
+
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Fornecedores - PetStock</title>
+</head>
+
+<body>
+
+    <h1>Fornecedores</h1>
+
+    <a href="/">Voltar para início</a>
+
+    <hr>
+
+    <table border="1">
+
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome Fantasia</th>
+                <th>CNPJ</th>
+                <th>Cidade</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr th:each="fornecedor : ${fornecedores}">
+
+                <td th:text="${fornecedor.idFornecedor}"></td>
+
+                <td th:text="${fornecedor.nomeFantasia}"></td>
+
+                <td th:text="${fornecedor.cnpj}"></td>
+
+                <td th:text="${fornecedor.endereco != null ? fornecedor.endereco.cidade : '-'}"></td>
+
+                <td th:text="${fornecedor.contato != null ? fornecedor.contato.email : '-'}"></td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</body>
+
+</html>

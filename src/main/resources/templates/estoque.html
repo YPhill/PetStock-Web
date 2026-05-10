@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Estoque - PetStock</title>
+</head>
+
+<body>
+
+    <h1>Estoque</h1>
+
+    <a href="/">Voltar para início</a>
+
+    <hr>
+
+    <table border="1">
+
+        <thead>
+            <tr>
+                <th>ID Produto</th>
+                <th>Produto</th>
+                <th>Categoria</th>
+                <th>Marca</th>
+                <th>Quantidade Atual</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr th:each="produto : ${produtos}">
+
+                <td th:text="${produto.idProduto}"></td>
+
+                <td th:text="${produto.nome}"></td>
+
+                <td th:text="${produto.categoria != null ? produto.categoria : '-'}"></td>
+
+                <td th:text="${produto.marca != null ? produto.marca : '-'}"></td>
+
+                <td th:text="${produto.estoque != null ? produto.estoque.quantidadeAtual : '-'}"></td>
+
+                <td th:text="${produto.estoque != null && produto.estoque.quantidadeAtual > 0 ? 'Disponível' : 'Sem estoque'}"></td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</body>
+
+</html>

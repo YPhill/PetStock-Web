@@ -15,6 +15,8 @@ public class RelatorioController {
      */
     @RequestMapping
     public String abrirRelatorios() {
+
+        // Abre templates/relatorios.html
         return "relatorios";
     }
 }

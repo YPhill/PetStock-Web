@@ -1,10 +1,25 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>PetStock Web</title>
+    <title>PetStock</title>
+
+    <!-- Importa o CSS principal do sistema -->
+    <link rel="stylesheet" href="/css/style.css">
 </head>
+
 <body>
-    <h1>PetStock Web funcionando!</h1>
+
+    <!-- Insere o cabeçalho padrão -->
+    <div th:replace="fragments/header :: header"></div>
+
+    <!-- Conteúdo principal da página -->
+    <main class="conteudo">
+        <h1>PetStock Web funcionando!</h1>
+        <p>Sistema iniciado com sucesso.</p>
+    </main>
+
 </body>
+
 </html>

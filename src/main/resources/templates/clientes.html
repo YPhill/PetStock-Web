@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Clientes - PetStock</title>
+</head>
+<body>
+
+    <h1>Clientes</h1>
+
+    <a href="/">Voltar para início</a>
+
+    <hr>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Cidade</th>
+                <th>Celular</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr th:each="cliente : ${clientes}">
+                <td th:text="${cliente.idCliente}"></td>
+                <td th:text="${cliente.nome}"></td>
+                <td th:text="${cliente.endereco != null ? cliente.endereco.cidade : '-'}"></td>
+                <td th:text="${cliente.contato != null ? cliente.contato.celular : '-'}"></td>
+                <td th:text="${cliente.contato != null ? cliente.contato.email : '-'}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
