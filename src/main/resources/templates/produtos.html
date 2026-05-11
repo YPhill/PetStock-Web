@@ -2,56 +2,66 @@
 <html lang="pt-br">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Produtos - PetStock</title>
+<!-- Importa o CSS principal do sistema -->
+<link rel="stylesheet" href="/css/style.css">
+<meta charset="UTF-8">
+<title>Produtos - PetStock</title>
 </head>
 
 <body>
+	<!-- Insere o cabeçalho padrão -->
+	<div th:replace="fragments/header :: header"></div>
 
-    <h1>Produtos</h1>
+	<!-- Conteúdo principal da página -->
+	<main class="conteudo">
 
-    <a href="/">Voltar para início</a>
+		<h1>Produtos</h1>
 
-    <hr>
 
-    <table border="1">
+		<hr>
 
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>Categoria</th>
-                <th>Marca</th>
-                <th>Preço</th>
-                <th>Estoque</th>
-                <th>Fornecedor</th>
-            </tr>
-        </thead>
+		<table border="1">
 
-        <tbody>
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Nome</th>
+					<th>Categoria</th>
+					<th>Marca</th>
+					<th>Preço</th>
+					<th>Estoque</th>
+					<th>Fornecedor</th>
+				</tr>
+			</thead>
 
-            <tr th:each="produto : ${produtos}">
+			<tbody>
 
-                <td th:text="${produto.idProduto}"></td>
+				<tr th:each="produto : ${produtos}">
 
-                <td th:text="${produto.nome}"></td>
+					<td th:text="${produto.idProduto}"></td>
 
-                <td th:text="${produto.categoria != null ? produto.categoria : '-'}"></td>
+					<td th:text="${produto.nome}"></td>
 
-                <td th:text="${produto.marca != null ? produto.marca : '-'}"></td>
+					<td
+						th:text="${produto.categoria != null ? produto.categoria : '-'}"></td>
 
-                <td th:text="${produto.preco}"></td>
+					<td th:text="${produto.marca != null ? produto.marca : '-'}"></td>
 
-                <td th:text="${produto.estoque != null ? produto.estoque.quantidadeAtual : '-'}"></td>
+					<td th:text="${produto.preco}"></td>
 
-                <td th:text="${produto.fornecedor != null ? produto.fornecedor.nomeFantasia : '-'}"></td>
+					<td
+						th:text="${produto.estoque != null ? produto.estoque.quantidadeAtual : '-'}"></td>
 
-            </tr>
+					<td
+						th:text="${produto.fornecedor != null ? produto.fornecedor.nomeFantasia : '-'}"></td>
 
-        </tbody>
+				</tr>
 
-    </table>
+			</tbody>
 
+		</table>
+
+	</main>
 </body>
 
 </html>

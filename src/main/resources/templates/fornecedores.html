@@ -2,50 +2,64 @@
 <html lang="pt-br">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Fornecedores - PetStock</title>
+
+<!-- Importa o CSS principal do sistema -->
+<link rel="stylesheet" href="/css/style.css">
+
+<meta charset="UTF-8">
+<title>Fornecedores - PetStock</title>
 </head>
 
 <body>
+	<!-- Insere o cabeçalho padrão -->
+	<div th:replace="fragments/header :: header"></div>
 
-    <h1>Fornecedores</h1>
+	<!-- Conteúdo principal da página -->
+	<main class="conteudo">
 
-    <a href="/">Voltar para início</a>
 
-    <hr>
 
-    <table border="1">
+		<h1>Fornecedores</h1>
 
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nome Fantasia</th>
-                <th>CNPJ</th>
-                <th>Cidade</th>
-                <th>Email</th>
-            </tr>
-        </thead>
+		<hr>
 
-        <tbody>
+		<table border="1">
 
-            <tr th:each="fornecedor : ${fornecedores}">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Nome Fantasia</th>
+					<th>CNPJ</th>
+					<th>Cidade</th>
+					<th>Email</th>
+				</tr>
+			</thead>
 
-                <td th:text="${fornecedor.idFornecedor}"></td>
+			<tbody>
 
-                <td th:text="${fornecedor.nomeFantasia}"></td>
+				<tr th:each="fornecedor : ${fornecedores}">
 
-                <td th:text="${fornecedor.cnpj}"></td>
+					<td th:text="${fornecedor.idFornecedor}"></td>
 
-                <td th:text="${fornecedor.endereco != null ? fornecedor.endereco.cidade : '-'}"></td>
+					<td th:text="${fornecedor.nomeFantasia}"></td>
 
-                <td th:text="${fornecedor.contato != null ? fornecedor.contato.email : '-'}"></td>
+					<td th:text="${fornecedor.cnpj}"></td>
 
-            </tr>
+					<td
+						th:text="${fornecedor.endereco != null ? fornecedor.endereco.cidade : '-'}"></td>
 
-        </tbody>
+					<td
+						th:text="${fornecedor.contato != null ? fornecedor.contato.email : '-'}"></td>
 
-    </table>
+				</tr>
 
+			</tbody>
+
+		</table>
+
+
+
+	</main>
 </body>
 
 </html>

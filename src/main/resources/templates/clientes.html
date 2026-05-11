@@ -1,38 +1,205 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Clientes - PetStock</title>
+<meta charset="UTF-8">
+<title>Clientes - PetStock</title>
+
+<!-- CSS global -->
+<link rel="stylesheet" href="/css/style.css">
 </head>
+
 <body>
 
-    <h1>Clientes</h1>
+	<!-- Cabeçalho padrão -->
+	<div th:replace="~{fragments/header :: header}"></div>
 
-    <a href="/">Voltar para início</a>
+	<main class="conteudo">
 
-    <hr>
+		<h1>Clientes</h1>
 
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>Cidade</th>
-                <th>Celular</th>
-                <th>Email</th>
-            </tr>
-        </thead>
+		<!-- Botões principais -->
+		<div>
+			<a href="/clientes/novo">
+				<button type="button">Cadastrar</button>
+			</a>
 
-        <tbody>
-            <tr th:each="cliente : ${clientes}">
-                <td th:text="${cliente.idCliente}"></td>
-                <td th:text="${cliente.nome}"></td>
-                <td th:text="${cliente.endereco != null ? cliente.endereco.cidade : '-'}"></td>
-                <td th:text="${cliente.contato != null ? cliente.contato.celular : '-'}"></td>
-                <td th:text="${cliente.contato != null ? cliente.contato.email : '-'}"></td>
-            </tr>
-        </tbody>
-    </table>
+			<button type="button" onclick="ativarModoEditar()">Editar</button>
+
+			<button type="button" onclick="ativarModoExcluir()">Excluir</button>
+
+			<button type="button" id="btnConfirmar" onclick="confirmarAcao()"
+				style="display: none;">Confirmar</button>
+
+			<button type="button" id="btnCancelar" onclick="cancelarSelecao()"
+				style="display: none;">Cancelar</button>
+		</div>
+
+		<hr>
+
+		<!-- Formulário usado para edição e exclusão -->
+		<form id="formSelecao" method="post">
+
+			<table border="1">
+
+				<thead>
+					<tr>
+						<th class="coluna-selecao" style="display: none;">Selecionar</th>
+						<th>ID</th>
+						<th>Nome</th>
+						<th>Rua</th>
+						<th>Cidade</th>
+						<th>Estado</th>
+						<th>CEP</th>
+						<th>Celular</th>
+						<th>E-mail</th>
+					</tr>
+				</thead>
+
+				<tbody>
+
+					<tr th:each="cliente : ${clientes}">
+
+						<!-- Checkbox escondido até ativar editar/excluir -->
+						<td class="coluna-selecao" style="display: none;"><input
+							type="checkbox" name="idsSelecionados"
+							th:value="${cliente.idCliente}"></td>
+
+						<td th:text="${cliente.idCliente}"></td>
+
+						<td th:text="${cliente.nome}"></td>
+
+						<td
+							th:text="${cliente.endereco != null ? cliente.endereco.rua : '-'}"></td>
+
+						<td
+							th:text="${cliente.endereco != null ? cliente.endereco.cidade : '-'}"></td>
+
+						<td
+							th:text="${cliente.endereco != null ? cliente.endereco.estado : '-'}"></td>
+
+						<td
+							th:text="${cliente.endereco != null ? cliente.endereco.cep : '-'}"></td>
+
+						<td
+							th:text="${cliente.contato != null ? cliente.contato.celular : '-'}"></td>
+
+						<td
+							th:text="${cliente.contato != null ? cliente.contato.email : '-'}"></td>
+
+					</tr>
+
+				</tbody>
+
+			</table>
+
+		</form>
+
+	</main>
+
+	<script>
+		/*
+		 * Guarda o modo atual da tela.
+		 * Pode ser: editar ou excluir.
+		 */
+		let modoAtual = "";
+
+		/*
+		 * Mostra os checkboxes da tabela.
+		 */
+		function mostrarSelecao() {
+
+			document.querySelectorAll(".coluna-selecao").forEach(
+					function(coluna) {
+						coluna.style.display = "table-cell";
+					});
+
+			document.getElementById("btnConfirmar").style.display = "inline-block";
+			document.getElementById("btnCancelar").style.display = "inline-block";
+		}
+
+		/*
+		 * Ativa modo de edição.
+		 * Neste modo o usuário deve selecionar apenas um cliente.
+		 */
+		function ativarModoEditar() {
+
+			modoAtual = "editar";
+			mostrarSelecao();
+		}
+
+		/*
+		 * Ativa modo de exclusão.
+		 * Neste modo o usuário pode selecionar vários clientes.
+		 */
+		function ativarModoExcluir() {
+
+			modoAtual = "excluir";
+			mostrarSelecao();
+		}
+
+		/*
+		 * Cancela seleção e limpa os checkboxes.
+		 */
+		function cancelarSelecao() {
+
+			modoAtual = "";
+
+			document.querySelectorAll("input[name='idsSelecionados']").forEach(
+					function(checkbox) {
+						checkbox.checked = false;
+					});
+
+			document.querySelectorAll(".coluna-selecao").forEach(
+					function(coluna) {
+						coluna.style.display = "none";
+					});
+
+			document.getElementById("btnConfirmar").style.display = "none";
+			document.getElementById("btnCancelar").style.display = "none";
+		}
+
+		/*
+		 * Confirma edição ou exclusão.
+		 */
+		function confirmarAcao() {
+
+			const selecionados = document
+					.querySelectorAll("input[name='idsSelecionados']:checked");
+
+			if (selecionados.length === 0) {
+				alert("Selecione pelo menos um cliente.");
+				return;
+			}
+
+			if (modoAtual === "editar") {
+
+				if (selecionados.length > 1) {
+					alert("Para editar, selecione apenas um cliente.");
+					return;
+				}
+
+				const id = selecionados[0].value;
+
+				window.location.href = "/clientes/editar?id=" + id;
+			}
+
+			if (modoAtual === "excluir") {
+
+				const confirmar = confirm("Deseja realmente excluir os clientes selecionados?");
+
+				if (!confirmar) {
+					return;
+				}
+
+				const form = document.getElementById("formSelecao");
+
+				form.action = "/clientes/excluir";
+				form.submit();
+			}
+		}
+	</script>
 
 </body>
+
 </html>

@@ -2,26 +2,34 @@
 <html lang="pt-br">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Relatórios - PetStock</title>
+
+<!-- Importa o CSS principal do sistema -->
+<link rel="stylesheet" href="/css/style.css">
+<meta charset="UTF-8">
+<title>Relatórios - PetStock</title>
 </head>
 
 <body>
+	<!-- Insere o cabeçalho padrão -->
+	<div th:replace="fragments/header :: header"></div>
 
-    <h1>Relatórios</h1>
+	<!-- Conteúdo principal da página -->
+	<main class="conteudo">
 
-    <a href="/">Voltar para início</a>
+		<h1>Relatórios</h1>
 
-    <hr>
 
-    <p>Página de relatórios criada com sucesso.</p>
+		<hr>
 
-    <ul>
-        <li>Relatório de vendas</li>
-        <li>Relatório de produtos</li>
-        <li>Relatório de estoque</li>
-    </ul>
+		<p>Página de relatórios criada com sucesso.</p>
 
+		<ul>
+			<li>Relatório de vendas</li>
+			<li>Relatório de produtos</li>
+			<li>Relatório de estoque</li>
+		</ul>
+
+	</main>
 </body>
 
 </html>

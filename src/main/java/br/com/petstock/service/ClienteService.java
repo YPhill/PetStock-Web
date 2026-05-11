@@ -110,4 +110,23 @@ public class ClienteService {
 
         clienteRepository.deleteById(id);
     }
+    
+    /*
+     * Busca um cliente pelo ID.
+     * Usado para carregar os dados na tela de edição.
+     */
+    public Cliente buscarPorId(int id) {
+
+        return clienteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado."));
+    }
+
+    /*
+     * Exclui vários clientes selecionados.
+     * Usado quando o usuário marca várias linhas na tabela.
+     */
+    public void excluirSelecionados(List<Integer> ids) {
+
+        clienteRepository.deleteAllById(ids);
+    }
 }
