@@ -12,7 +12,7 @@
 
 <body>
 	<!-- Insere o cabeçalho padrão -->
-	<div th:replace="fragments/header :: header"></div>
+	<div th:replace="~{fragments/header :: header}"></div>
 
 	<!-- Conteúdo principal da página -->
 	<main class="conteudo">
@@ -20,46 +20,171 @@
 
 
 		<h1>Fornecedores</h1>
+		<p th:if="${erro}" th:text="${erro}" style="color: red;"></p>
+
+		<div>
+			<a href="/fornecedores/novo">
+				<button type="button">Cadastrar</button>
+			</a>
+
+			<button type="button" onclick="ativarModoEditar()">Editar</button>
+
+			<button type="button" onclick="ativarModoExcluir()">Excluir</button>
+
+			<button type="button" id="btnConfirmar" onclick="confirmarAcao()"
+				style="display: none;">Confirmar</button>
+
+			<button type="button" id="btnCancelar" onclick="cancelarSelecao()"
+				style="display: none;">Cancelar</button>
+		</div>
+
+		<div>
+			<label>Pesquisar fornecedor:</label> <br> <input type="text"
+				id="campoPesquisa" placeholder="Digite o nome fantasia">
+		</div>
 
 		<hr>
 
-		<table border="1">
+		<form id="formSelecao" method="post">
 
-			<thead>
-				<tr>
-					<th>ID</th>
-					<th>Nome Fantasia</th>
-					<th>CNPJ</th>
-					<th>Cidade</th>
-					<th>Email</th>
-				</tr>
-			</thead>
+			<table border="1">
 
-			<tbody>
+				<thead>
+					<tr>
+						<th class="coluna-selecao" style="display: none;">Selecionar</th>
+						<th>ID</th>
+						<th>Nome Fantasia</th>
+						<th>CNPJ</th>
+						<th>Cidade</th>
+						<th>Email</th>
+					</tr>
+				</thead>
 
-				<tr th:each="fornecedor : ${fornecedores}">
+				<tbody>
 
-					<td th:text="${fornecedor.idFornecedor}"></td>
+					<tr th:each="fornecedor : ${fornecedores}" class="linha-fornecedor">
 
-					<td th:text="${fornecedor.nomeFantasia}"></td>
+						<td class="coluna-selecao" style="display: none;"><input
+							type="checkbox" name="idsSelecionados"
+							th:value="${fornecedor.idFornecedor}"></td>
 
-					<td th:text="${fornecedor.cnpj}"></td>
+						<td th:text="${fornecedor.idFornecedor}"></td>
 
-					<td
-						th:text="${fornecedor.endereco != null ? fornecedor.endereco.cidade : '-'}"></td>
+						<td class="nome-fornecedor" th:text="${fornecedor.nomeFantasia}"></td>
 
-					<td
-						th:text="${fornecedor.contato != null ? fornecedor.contato.email : '-'}"></td>
+						<td th:text="${fornecedor.cnpj}"></td>
 
-				</tr>
+						<td
+							th:text="${fornecedor.endereco != null ? fornecedor.endereco.cidade : '-'}"></td>
 
-			</tbody>
+						<td
+							th:text="${fornecedor.contato != null ? fornecedor.contato.email : '-'}"></td>
 
-		</table>
+					</tr>
 
+				</tbody>
+
+			</table>
+
+		</form>
 
 
 	</main>
+
+	<script>
+		let modoAtual = "";
+
+		function mostrarSelecao() {
+			document.querySelectorAll(".coluna-selecao").forEach(
+					function(coluna) {
+						coluna.style.display = "table-cell";
+					});
+
+			document.getElementById("btnConfirmar").style.display = "inline-block";
+			document.getElementById("btnCancelar").style.display = "inline-block";
+		}
+
+		function ativarModoEditar() {
+			modoAtual = "editar";
+			mostrarSelecao();
+		}
+
+		function ativarModoExcluir() {
+			modoAtual = "excluir";
+			mostrarSelecao();
+		}
+
+		function cancelarSelecao() {
+			modoAtual = "";
+
+			document.querySelectorAll("input[name='idsSelecionados']").forEach(
+					function(checkbox) {
+						checkbox.checked = false;
+					});
+
+			document.querySelectorAll(".coluna-selecao").forEach(
+					function(coluna) {
+						coluna.style.display = "none";
+					});
+
+			document.getElementById("btnConfirmar").style.display = "none";
+			document.getElementById("btnCancelar").style.display = "none";
+		}
+
+		function confirmarAcao() {
+			const selecionados = document
+					.querySelectorAll("input[name='idsSelecionados']:checked");
+
+			if (selecionados.length === 0) {
+				alert("Selecione pelo menos um fornecedor.");
+				return;
+			}
+
+			if (modoAtual === "editar") {
+				if (selecionados.length > 1) {
+					alert("Selecione apenas um fornecedor para editar.");
+					return;
+				}
+
+				const id = selecionados[0].value;
+				window.location.href = "/fornecedores/editar?id=" + id;
+			}
+
+			if (modoAtual === "excluir") {
+				const confirmar = confirm("Deseja realmente excluir os fornecedores selecionados?");
+
+				if (!confirmar) {
+					return;
+				}
+
+				const form = document.getElementById("formSelecao");
+				form.action = "/fornecedores/excluir";
+				form.submit();
+			}
+		}
+
+		document.getElementById("campoPesquisa").addEventListener(
+				"input",
+				function() {
+					const textoBusca = this.value.toLowerCase();
+					const linhas = document
+							.querySelectorAll(".linha-fornecedor");
+
+					linhas.forEach(function(linha) {
+						const nomeFornecedor = linha
+								.querySelector(".nome-fornecedor").textContent
+								.toLowerCase();
+
+						if (nomeFornecedor.includes(textoBusca)) {
+							linha.style.display = "";
+						} else {
+							linha.style.display = "none";
+						}
+					});
+				});
+	</script>
+
+
 </body>
 
 </html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<title>Fornecedor - PetStock</title>
+
+<!-- CSS global -->
+<link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+	<!-- Cabeçalho padrão -->
+	<div th:replace="~{fragments/header :: header}"></div>
+
+	<main class="conteudo">
+
+		<h1>Cadastrar Fornecedor</h1>
+
+		<!-- Formulário -->
+		<form th:action="@{/fornecedores/salvar}" th:object="${fornecedor}"
+			method="post">
+
+			<!-- IDs escondidos usados na edição -->
+			<input type="hidden" th:field="*{idFornecedor}"> <input
+				type="hidden" th:field="*{endereco.idEndereco}"> <input
+				type="hidden" th:field="*{contato.idContato}">
+
+			<!-- Nome fantasia -->
+			<div>
+				<label>Nome Fantasia:</label> <br> <input type="text"
+					th:field="*{nomeFantasia}" required>
+			</div>
+
+			<br>
+
+			<!-- CNPJ -->
+			<div>
+				<label>CNPJ:</label> <br> <input type="text" th:field="*{cnpj}"
+					required>
+			</div>
+
+			<br>
+
+			<!-- Contrato social -->
+			<div>
+				<label>Contrato Social:</label> <br> <input type="text"
+					th:field="*{contratoSocial}" required>
+			</div>
+
+			<br>
+
+			<!-- Rua -->
+			<div>
+				<label>Rua:</label> <br> <input type="text"
+					th:field="*{endereco.rua}" required>
+			</div>
+
+			<br>
+
+			<!-- Cidade -->
+			<div>
+				<label>Cidade:</label> <br> <input type="text"
+					th:field="*{endereco.cidade}" required>
+			</div>
+
+			<br>
+
+			<!-- Estado -->
+			<div>
+				<label>Estado:</label> <br> <input type="text"
+					th:field="*{endereco.estado}" required>
+			</div>
+
+			<br>
+
+			<!-- CEP -->
+			<div>
+				<label>CEP:</label> <br> <input type="text"
+					th:field="*{endereco.cep}" required>
+			</div>
+
+			<br>
+
+			<!-- Telefone -->
+			<div>
+				<label>Telefone:</label> <br> <input type="text"
+					th:field="*{contato.telefone}">
+			</div>
+
+			<br>
+
+			<!-- Celular -->
+			<div>
+				<label>Celular:</label> <br> <input type="text"
+					th:field="*{contato.celular}">
+			</div>
+
+			<br>
+
+			<!-- Email -->
+			<div>
+				<label>Email:</label> <br> <input type="email"
+					th:field="*{contato.email}">
+			</div>
+
+			<br>
+
+			<!-- Botão -->
+			<button type="submit">Salvar Fornecedor</button>
+
+		</form>
+
+	</main>
+
+</body>
+
+</html>

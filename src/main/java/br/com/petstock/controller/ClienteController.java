@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import br.com.petstock.model.Cliente;
 import br.com.petstock.service.ClienteService;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+
 /*
  * Controller responsável pelas rotas do módulo de clientes.
  */
@@ -74,10 +76,21 @@ public class ClienteController {
 	 * Exclui vários clientes selecionados.
 	 */
 	@PostMapping("/clientes/excluir")
-	public String excluirClientes(@RequestParam("idsSelecionados") List<Integer> idsSelecionados) {
+	public String excluirClientes(
+	        @RequestParam("idsSelecionados") List<Integer> idsSelecionados,
+	        Model model) {
 
-		clienteService.excluirSelecionados(idsSelecionados);
+	    try {
+	        clienteService.excluirSelecionados(idsSelecionados);
 
-		return "redirect:/clientes";
+	    } catch (Exception e) {
+
+	        model.addAttribute("clientes", clienteService.listarTodos());
+	        model.addAttribute("erro", "Não é possível excluir cliente vinculado a uma venda.");
+
+	        return "clientes";
+	    }
+
+	    return "redirect:/clientes";
 	}
-}
+	}

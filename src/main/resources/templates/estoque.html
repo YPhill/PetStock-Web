@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 
 <head>
 
@@ -11,12 +11,21 @@
 
 <body>
 	<!-- Insere o cabeçalho padrão -->
-	<div th:replace="fragments/header :: header"></div>
+	<div th:replace="~{fragments/header :: header}"></div>
 
 	<!-- Conteúdo principal da página -->
 	<main class="conteudo">
 
 		<h1>Estoque</h1>
+
+		<!-- Mensagem de erro das operações de estoque -->
+		<p th:if="${erro}" th:text="${erro}" style="color: red;"></p>
+
+		<!-- Campo de pesquisa em tempo real -->
+		<div>
+			<label>Pesquisar produto:</label> <br> <input type="text"
+				id="campoPesquisa" placeholder="Digite o nome do produto">
+		</div>
 
 
 		<hr>
@@ -25,6 +34,7 @@
 
 			<thead>
 				<tr>
+					<th>Selecionar</th>
 					<th>ID Produto</th>
 					<th>Produto</th>
 					<th>Categoria</th>
@@ -36,29 +46,147 @@
 
 			<tbody>
 
-				<tr th:each="produto : ${produtos}">
+				<tr th:each="estoque : ${estoques}" class="linha-estoque">
 
-					<td th:text="${produto.idProduto}"></td>
+					<!-- Seleciona apenas um produto para movimentar o estoque -->
+					<td><input type="radio" name="produtoSelecionado"
+						th:value="${estoque.produto.idProduto}"
+						th:data-nome="${estoque.produto.nome}"></td>
 
-					<td th:text="${produto.nome}"></td>
+					<td th:text="${estoque.produto.idProduto}"></td>
 
-					<td
-						th:text="${produto.categoria != null ? produto.categoria : '-'}"></td>
-
-					<td th:text="${produto.marca != null ? produto.marca : '-'}"></td>
-
-					<td
-						th:text="${produto.estoque != null ? produto.estoque.quantidadeAtual : '-'}"></td>
+					<td class="nome-produto" th:text="${estoque.produto.nome}"></td>
 
 					<td
-						th:text="${produto.estoque != null && produto.estoque.quantidadeAtual > 0 ? 'Disponível' : 'Sem estoque'}"></td>
+						th:text="${estoque.produto.categoria != null ? estoque.produto.categoria : '-'}"></td>
 
+					<td
+						th:text="${estoque.produto.marca != null ? estoque.produto.marca : '-'}"></td>
+
+					<td th:text="${estoque.quantidadeAtual}"></td>
+
+					<td
+						th:text="${estoque.quantidadeAtual == 0 ? '🔴 Sem estoque' : (estoque.quantidadeAtual <= 10 ? '🟡 Baixo' : '🟢 Normal')}"></td>
+
+					</td>
 				</tr>
 
 			</tbody>
 
 		</table>
+
+		<!-- Botões principais de movimentação do estoque -->
+		<div>
+			<button type="button" onclick="prepararMovimento('entrada')">
+				Entrada</button>
+
+			<button type="button" onclick="prepararMovimento('saida')">
+				Saída</button>
+
+			<button type="button" onclick="prepararMovimento('ajustar')">
+				Ajustar</button>
+		</div>
 	</main>
+
+	<script>
+		/*
+		 * Busca em tempo real por nome do produto.
+		 * Conforme o usuário digita, a tabela de estoque é filtrada.
+		 */
+		document.getElementById("campoPesquisa").addEventListener(
+				"input",
+				function() {
+
+					const textoBusca = this.value.toLowerCase();
+
+					const linhas = document.querySelectorAll(".linha-estoque");
+
+					linhas.forEach(function(linha) {
+
+						const nomeProduto = linha
+								.querySelector(".nome-produto").textContent
+								.toLowerCase();
+
+						if (nomeProduto.includes(textoBusca)) {
+							linha.style.display = "";
+						} else {
+							linha.style.display = "none";
+						}
+					});
+				});
+
+		/*
+		 * Prepara a movimentação do estoque.
+		 * O usuário seleciona um produto na tabela e escolhe Entrada, Saída ou Ajustar.
+		 */
+		function prepararMovimento(acao) {
+
+			// Busca o produto selecionado na tabela
+			const selecionado = document
+					.querySelector("input[name='produtoSelecionado']:checked");
+
+			if (!selecionado) {
+				alert("Selecione um produto na tabela.");
+				return;
+			}
+
+			// Pega o ID e o nome do produto selecionado
+			const idProduto = selecionado.value;
+			const nomeProduto = selecionado.getAttribute("data-nome");
+
+			let mensagem = "";
+
+			if (acao === "entrada") {
+				mensagem = "Quantas unidades chegaram para o produto "
+						+ nomeProduto + "?";
+			}
+
+			if (acao === "saida") {
+				mensagem = "Quantas unidades saíram do produto " + nomeProduto
+						+ "?";
+			}
+
+			if (acao === "ajustar") {
+				mensagem = "Quantas unidades existem atualmente do produto "
+						+ nomeProduto + "?";
+			}
+
+			// Abre uma caixa de mensagem para o usuário informar a quantidade
+			const quantidade = prompt(mensagem);
+
+			if (quantidade === null) {
+				return;
+			}
+
+			if (quantidade.trim() === "" || Number(quantidade) < 0) {
+				alert("Informe uma quantidade válida.");
+				return;
+			}
+
+			// Cria um formulário temporário para enviar ao Controller
+			const form = document.createElement("form");
+			form.method = "post";
+			form.action = "/estoque/" + acao;
+
+			// Campo escondido com o ID do produto
+			const inputId = document.createElement("input");
+			inputId.type = "hidden";
+			inputId.name = "idProduto";
+			inputId.value = idProduto;
+
+			// Campo escondido com a quantidade informada
+			const inputQuantidade = document.createElement("input");
+			inputQuantidade.type = "hidden";
+			inputQuantidade.name = "quantidade";
+			inputQuantidade.value = quantidade;
+
+			form.appendChild(inputId);
+			form.appendChild(inputQuantidade);
+
+			document.body.appendChild(form);
+			form.submit();
+		}
+	</script>
 </body>
 
 </html>

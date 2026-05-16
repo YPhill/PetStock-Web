@@ -18,6 +18,8 @@
 
 		<h1>Clientes</h1>
 
+		<p th:if="${erro}" th:text="${erro}" style="color: red;"></p>
+
 		<!-- Botões principais -->
 		<div>
 			<a href="/clientes/novo">
@@ -40,6 +42,12 @@
 		<!-- Formulário usado para edição e exclusão -->
 		<form id="formSelecao" method="post">
 
+
+			<div>
+				<label>Pesquisar cliente:</label> <br> <input type="text"
+					id="campoPesquisa" placeholder="Digite o nome do cliente">
+			</div>
+
 			<table border="1">
 
 				<thead>
@@ -58,7 +66,7 @@
 
 				<tbody>
 
-					<tr th:each="cliente : ${clientes}">
+					<tr th:each="cliente : ${clientes}" class="linha-cliente">
 
 						<!-- Checkbox escondido até ativar editar/excluir -->
 						<td class="coluna-selecao" style="display: none;"><input
@@ -67,7 +75,7 @@
 
 						<td th:text="${cliente.idCliente}"></td>
 
-						<td th:text="${cliente.nome}"></td>
+						<td class="nome-cliente" th:text="${cliente.nome}"></td>
 
 						<td
 							th:text="${cliente.endereco != null ? cliente.endereco.rua : '-'}"></td>
@@ -198,6 +206,44 @@
 				form.submit();
 			}
 		}
+
+		//Barra de pesquisa:
+
+		/*
+		 * Busca em tempo real por nome do cliente.
+		 * Conforme o usuário digita, a tabela é filtrada automaticamente.
+		 */
+		document.getElementById("campoPesquisa").addEventListener(
+				"input",
+				function() {
+
+					// Texto digitado no campo
+					const textoBusca = this.value.toLowerCase();
+
+					// Todas as linhas da tabela
+					const linhas = document.querySelectorAll(".linha-cliente");
+
+					// Percorre todas as linhas
+					linhas.forEach(function(linha) {
+
+						// Nome do cliente da linha atual
+						const nomeCliente = linha
+								.querySelector(".nome-cliente").textContent
+								.toLowerCase();
+
+						// Verifica se o nome contém o texto digitado
+						if (nomeCliente.includes(textoBusca)) {
+
+							// Mostra linha
+							linha.style.display = "";
+
+						} else {
+
+							// Esconde linha
+							linha.style.display = "none";
+						}
+					});
+				});
 	</script>
 
 </body>

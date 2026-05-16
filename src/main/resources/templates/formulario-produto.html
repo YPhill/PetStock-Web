@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Produto - PetStock</title>
+
+	<!-- Importa o CSS principal -->
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+	<!-- Cabeçalho padrão -->
+	<div th:replace="~{fragments/header :: header}"></div>
+
+	<main class="conteudo">
+
+		<h1>Produto</h1>
+
+		<!-- Formulário de cadastro/edição de produto -->
+		<form th:action="@{/produtos/salvar}" th:object="${produto}" method="post">
+
+			<!-- ID escondido usado na edição -->
+			<input type="hidden" th:field="*{idProduto}">
+
+			<!-- Nome do produto -->
+			<div>
+				<label>Nome:</label>
+				<br>
+				<input type="text" th:field="*{nome}" required>
+			</div>
+
+			<br>
+
+			<!-- Categoria do produto -->
+			<div>
+				<label>Categoria:</label>
+				<br>
+				<input type="text" th:field="*{categoria}">
+			</div>
+
+			<br>
+
+			<!-- Preço do produto -->
+			<div>
+				<label>Preço:</label>
+				<br>
+				<input type="number" step="0.01" th:field="*{preco}" required>
+			</div>
+
+			<br>
+
+			<!-- Marca do produto -->
+			<div>
+				<label>Marca:</label>
+				<br>
+				<input type="text" th:field="*{marca}">
+			</div>
+
+			<br>
+
+			<!-- Validade do produto -->
+			<div>
+				<label>Validade:</label>
+				<br>
+				<input type="date" th:field="*{validade}">
+			</div>
+
+			<br>
+
+			<!-- Fornecedor vinculado ao produto -->
+			<div>
+				<label>Fornecedor:</label>
+				<br>
+
+				<select th:field="*{fornecedor.idFornecedor}">
+					<option value="0">Sem fornecedor</option>
+
+					<option th:each="fornecedor : ${fornecedores}"
+							th:value="${fornecedor.idFornecedor}"
+							th:text="${fornecedor.nomeFantasia}">
+					</option>
+				</select>
+			</div>
+
+			<br>
+
+			<!-- Botão de salvar -->
+			<button type="submit">Salvar Produto</button>
+
+		</form>
+
+	</main>
+
+</body>
+
+</html>
