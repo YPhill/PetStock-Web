@@ -41,9 +41,12 @@ public class ClienteController {
 	 * Abre o formulário de cadastro.
 	 */
 	@GetMapping("/clientes/novo")
-	public String novoCliente(Model model) {
+	public String novoCliente(@RequestParam(value = "origem", required = false) String origem, Model model) {
 
 		model.addAttribute("cliente", new Cliente());
+
+		// Guarda de onde o usuário veio
+		model.addAttribute("origem", origem);
 
 		return "formulario-cliente";
 	}
@@ -65,9 +68,15 @@ public class ClienteController {
 	 * Salva cliente novo ou editado.
 	 */
 	@PostMapping("/clientes/salvar")
-	public String salvarCliente(Cliente cliente) {
+	public String salvarCliente(Cliente cliente,
+			@RequestParam(value = "origem", required = false) String origem) {
 
 		clienteService.salvar(cliente);
+
+		// Se veio da tela de vendas, volta para vendas
+		if ("vendas".equals(origem)) {
+			return "redirect:/vendas";
+		}
 
 		return "redirect:/clientes";
 	}

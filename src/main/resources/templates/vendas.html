@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 
 <head>
 
@@ -11,41 +11,431 @@
 
 <body>
 	<!-- Insere o cabeçalho padrão -->
-	<div th:replace="fragments/header :: header"></div>
+	<div th:replace="~{fragments/header :: header}"></div>
 
 	<!-- Conteúdo principal da página -->
 	<main class="conteudo">
 		<h1>Vendas</h1>
 
+		<!-- Data da venda puxada do computador do usuário -->
+		<p>
+			Data da venda: <span id="dataVenda"></span>
+		</p>
+
+		<!-- Área principal da venda -->
+		<section>
+
+			<!-- Seleção do cliente -->
+			<div>
+				<label>Cliente:</label> <br> <input list="listaClientes"
+					id="clienteSelecionado" placeholder="Digite o nome do cliente">
+
+				<datalist id="listaClientes">
+					<option th:each="cliente : ${clientes}" th:value="${cliente.nome}"
+						th:data-id="${cliente.idCliente}"></option>
+				</datalist>
+
+				<br> <br> <label> <input type="checkbox"
+					id="vendaSemCliente"> Venda sem cliente
+				</label> <br> <br> <a href="/clientes/novo?origem=vendas">
+					<button type="button">Novo Cliente</button>
+				</a>
+			</div>
+
+			<hr>
+
+			<!-- Seleção do produto -->
+			<div>
+				<label>Produto:</label> <br> <input list="listaProdutos"
+					id="produtoSelecionado" placeholder="Digite o nome do produto"
+					onchange="preencherProduto()">
+
+				<datalist id="listaProdutos">
+					<option th:each="produto : ${produtos}"
+						th:value="${produto.nome + ' (' + (produto.estoque != null ? produto.estoque.quantidadeAtual : 0) + ')'}"
+						th:data-nome-real="${produto.nome}"
+						th:data-id="${produto.idProduto}" th:data-preco="${produto.preco}"
+						th:data-estoque="${produto.estoque != null ? produto.estoque.quantidadeAtual : 0}"
+						th:data-estoque-original="${produto.estoque != null ? produto.estoque.quantidadeAtual : 0}">
+					</option>
+				</datalist>
+			</div>
+
+			<br>
+
+			<!-- Preço e quantidade -->
+			<div>
+				<label>Preço:</label> <br> <input type="text" id="precoProduto"
+					readonly>
+			</div>
+
+			<br>
+
+			<div>
+				<label>Quantidade:</label> <br> <input type="number"
+					id="quantidadeProduto" min="1" value="1">
+			</div>
+
+			<br>
+
+			<button type="button" onclick="adicionarAoCarrinho()">
+				Adicionar ao carrinho</button>
+
+		</section>
 
 		<hr>
 
-		<table border="1">
+		<!-- Carrinho da venda -->
+		<section>
+			<h2>Carrinho</h2>
 
-			<thead>
-				<tr>
-					<th>ID</th>
-					<th>Data</th>
-					<th>Cliente</th>
-					<th>Valor Total</th>
-				</tr>
-			</thead>
+			<table border="1">
+				<thead>
+					<tr>
+						<th>Produto</th>
+						<th>Preço</th>
+						<th>Quantidade</th>
+						<th>Subtotal</th>
+					</tr>
+				</thead>
 
-			<tbody>
+				<tbody id="tabelaCarrinho">
+					<!-- Itens adicionados via JavaScript -->
+				</tbody>
+			</table>
 
-				<tr th:each="venda : ${vendas}">
-					<td th:text="${venda.idVenda}"></td>
-					<td th:text="${venda.dataVenda}"></td>
-					<td
-						th:text="${venda.cliente != null ? venda.cliente.nome : 'Sem cliente'}"></td>
-					<td th:text="${venda.valorTotal}"></td>
-				</tr>
+			<h3>
+				Total: R$ <span id="valorTotal">0.00</span>
+			</h3>
 
-			</tbody>
+			<button type="button" onclick="editarItemCarrinho()">Editar
+				item</button>
+			<button type="button" onclick="removerItemCarrinho()">Remover
+				item</button>
+			<button type="button" onclick="limparCarrinho()">Limpar
+				carrinho</button>
+			<button type="button" onclick="finalizarVenda()">Finalizar
+				venda</button>
+		</section>
 
-		</table>
+
+		<hr>
+
 
 	</main>
+
+	<script>
+	/*
+	 * Lista temporária dos itens da venda.
+	 * A venda só será salva no banco ao clicar em Finalizar venda.
+	 */
+	let carrinho = [];
+
+	/*
+	 * Guarda o produto selecionado atualmente.
+	 */
+	let produtoAtual = null;
+	
+	
+	/*
+	 * Atualiza temporariamente a quantidade exibida na lista de produtos.
+	 * 
+	 * A quantidade exibida considera:
+	 * estoque real do banco - quantidade já adicionada no carrinho.
+	 */
+	function atualizarListaProdutos() {
+
+		const opcoes = document.querySelectorAll("#listaProdutos option");
+
+		opcoes.forEach(function(opcao) {
+
+			const idProduto = Number(opcao.getAttribute("data-id"));
+			const nomeReal = opcao.getAttribute("data-nome-real");
+			const estoqueOriginal = Number(opcao.getAttribute("data-estoque-original"));
+
+			let quantidadeNoCarrinho = 0;
+
+			carrinho.forEach(function(item) {
+
+				if (item.idProduto === idProduto) {
+					quantidadeNoCarrinho += item.quantidade;
+				}
+			});
+
+			const estoqueDisponivel = estoqueOriginal - quantidadeNoCarrinho;
+
+			opcao.value = nomeReal + " (" + estoqueDisponivel + ")";
+
+			opcao.setAttribute("data-estoque", estoqueDisponivel);
+		});
+	}
+
+	/*
+	 * Preenche automaticamente preço e estoque do produto selecionado.
+	 */
+	function preencherProduto() {
+		const nomeDigitado = document.getElementById("produtoSelecionado").value;
+		const opcoes = document.querySelectorAll("#listaProdutos option");
+
+		produtoAtual = null;
+
+		opcoes.forEach(function(opcao) {
+			if (opcao.value === nomeDigitado) {
+				produtoAtual = {
+					id: Number(opcao.getAttribute("data-id")),
+					nome: opcao.getAttribute("data-nome-real"),
+					preco: Number(opcao.getAttribute("data-preco")),
+					estoque: Number(opcao.getAttribute("data-estoque"))
+				};
+			}
+		});
+
+		if (produtoAtual != null) {
+			document.getElementById("precoProduto").value = produtoAtual.preco.toFixed(2);
+		}
+	}
+
+	/*
+	 * Adiciona produto ao carrinho, validando estoque antes.
+	 */
+	function adicionarAoCarrinho() {
+		if (produtoAtual == null) {
+			alert("Selecione um produto válido.");
+			return;
+		}
+
+		const quantidade = Number(document.getElementById("quantidadeProduto").value);
+
+		if (quantidade <= 0) {
+			alert("Informe uma quantidade válida.");
+			return;
+		}
+
+		const itemExistente = carrinho.find(item => item.idProduto === produtoAtual.id);
+		const quantidadeJaNoCarrinho = itemExistente ? itemExistente.quantidade : 0;
+
+		if (quantidadeJaNoCarrinho + quantidade > produtoAtual.estoque) {
+			alert("Estoque insuficiente. Disponível: " + produtoAtual.estoque);
+			return;
+		}
+
+		if (itemExistente) {
+			itemExistente.quantidade += quantidade;
+			itemExistente.subtotal = itemExistente.quantidade * itemExistente.preco;
+		} else {
+			carrinho.push({
+				idProduto: produtoAtual.id,
+				nome: produtoAtual.nome,
+				preco: produtoAtual.preco,
+				estoque: produtoAtual.estoque,
+				quantidade: quantidade,
+				subtotal: produtoAtual.preco * quantidade
+			});
+		}
+
+		atualizarCarrinho();
+		
+		/*
+		 * Limpa os campos do produto para facilitar o próximo lançamento.
+		 */
+		document.getElementById("produtoSelecionado").value = "";
+		document.getElementById("precoProduto").value = "";
+		document.getElementById("quantidadeProduto").value = 1;
+		produtoAtual = null;
+		
+		atualizarListaProdutos();
+	}
+
+	/*
+	 * Atualiza a tabela do carrinho e o total.
+	 */
+	function atualizarCarrinho() {
+		const tabela = document.getElementById("tabelaCarrinho");
+		tabela.innerHTML = "";
+
+		let total = 0;
+
+		carrinho.forEach(function(item, index) {
+			total += item.subtotal;
+
+			tabela.innerHTML += `
+				<tr>
+					<td><input type="radio" name="itemCarrinho" value="${index}"> ${item.nome}</td>
+					<td>R$ ${item.preco.toFixed(2)}</td>
+					<td>${item.quantidade}</td>
+					<td>R$ ${item.subtotal.toFixed(2)}</td>
+				</tr>
+			`;
+		});
+
+		document.getElementById("valorTotal").textContent = total.toFixed(2);
+	}
+
+	function limparCarrinho() {
+		carrinho = [];
+		atualizarCarrinho();
+	}
+
+	function removerItemCarrinho() {
+		const selecionado = document.querySelector("input[name='itemCarrinho']:checked");
+
+		if (!selecionado) {
+			alert("Selecione um item do carrinho.");
+			return;
+		}
+
+		carrinho.splice(Number(selecionado.value), 1);
+		atualizarCarrinho();
+		atualizarListaProdutos();
+	}
+
+	function editarItemCarrinho() {
+		const selecionado = document.querySelector("input[name='itemCarrinho']:checked");
+
+		if (!selecionado) {
+			alert("Selecione um item do carrinho.");
+			return;
+		}
+
+		const indice = Number(selecionado.value);
+		const item = carrinho[indice];
+
+		const novaQuantidade = Number(prompt("Nova quantidade para " + item.nome + ":", item.quantidade));
+
+		if (novaQuantidade <= 0) {
+			alert("Quantidade inválida.");
+			return;
+		}
+		
+		/*
+		 * Valida se a nova quantidade ultrapassa o estoque disponível.
+		 */
+		if (novaQuantidade > item.estoque) {
+
+			alert("Estoque insuficiente. Disponível: " + item.estoque);
+
+			return;
+		}
+
+		item.quantidade = novaQuantidade;
+		item.subtotal = item.quantidade * item.preco;
+
+		atualizarCarrinho();
+		atualizarListaProdutos();
+	}
+	/*
+	 * Desabilita o campo de cliente quando a venda for sem cliente.
+	 */
+	document.getElementById("vendaSemCliente").addEventListener("change", function() {
+
+		const campoCliente = document.getElementById("clienteSelecionado");
+
+		if (this.checked) {
+
+			campoCliente.value = "";
+			campoCliente.disabled = true;
+
+		} else {
+
+			campoCliente.disabled = false;
+		}
+	});
+
+	/*
+	 * Finaliza a venda.
+	 * Envia o carrinho para o backend salvar no banco e baixar o estoque.
+	 */
+	function finalizarVenda() {
+
+		// Verifica se existem itens no carrinho
+		if (carrinho.length === 0) {
+			alert("Adicione pelo menos um produto ao carrinho.");
+			return;
+		}
+
+		// Verifica se a venda será feita sem cliente
+		const vendaSemCliente = document.getElementById("vendaSemCliente").checked;
+
+		let clienteId = null;
+
+		/*
+		 * Se NÃO for venda sem cliente,
+		 * tenta encontrar o cliente digitado na lista.
+		 */
+		if (!vendaSemCliente) {
+
+			const nomeCliente = document.getElementById("clienteSelecionado").value;
+			const clientes = document.querySelectorAll("#listaClientes option");
+
+			clientes.forEach(function(cliente) {
+				if (cliente.value === nomeCliente) {
+					clienteId = Number(cliente.getAttribute("data-id"));
+				}
+			});
+
+			if (clienteId === null) {
+				alert("Selecione um cliente válido ou marque venda sem cliente.");
+				return;
+			}
+		}
+
+		// Monta o objeto que será enviado para o Controller
+		const venda = {
+			clienteId: clienteId,
+			itens: carrinho.map(function(item) {
+				return {
+					produtoId: item.idProduto,
+					quantidade: item.quantidade
+				};
+			})
+		};
+
+		// Envia a venda para o backend
+		fetch("/vendas/finalizar", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify(venda)
+		})
+		.then(function(response) {
+			return response.text().then(function(mensagem) {
+				if (!response.ok) {
+					throw new Error(mensagem);
+				}
+
+				return mensagem;
+			});
+		})
+		.then(function(mensagem) {
+			alert(mensagem);
+
+			// Limpa o carrinho após finalizar
+			limparCarrinho();
+
+			// Limpa campos da tela
+			document.getElementById("clienteSelecionado").value = "";
+			document.getElementById("produtoSelecionado").value = "";
+			document.getElementById("precoProduto").value = "";
+			document.getElementById("quantidadeProduto").value = 1;
+			document.getElementById("vendaSemCliente").checked = false;
+
+			// Recarrega a página para atualizar estoque dos produtos
+			window.location.reload();
+		})
+		.catch(function(erro) {
+			alert("Erro ao finalizar venda: " + erro.message);
+		});
+	}
+	
+	/*
+	 * Mostra a data atual na tela de vendas.
+	 */
+	document.getElementById("dataVenda").textContent =
+		new Date().toLocaleDateString("pt-BR");
+	
+	
+</script>
 </body>
 
 </html>
