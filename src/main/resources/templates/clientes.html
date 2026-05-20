@@ -7,6 +7,8 @@
 
 <!-- CSS global -->
 <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/header.css">
+<link rel="stylesheet" href="/css/clientes.css">
 </head>
 
 <body>
@@ -16,164 +18,160 @@
 
 	<main class="conteudo">
 
-		<h1>Clientes</h1>
-
 		<p th:if="${erro}" th:text="${erro}" style="color: red;"></p>
 
-		<!-- Botões principais -->
-		<div>
-			<a href="/clientes/novo">
-				<button type="button">Cadastrar</button>
-			</a>
+		<div class="layout-clientes">
 
-			<button type="button" onclick="ativarModoEditar()">Editar</button>
+			<!-- Área esquerda -->
+			<div class="area-tabela">
 
-			<button type="button" onclick="ativarModoExcluir()">Excluir</button>
+				<!-- Formulário usado para edição e exclusão -->
+				<form id="formSelecao" method="post">
 
-			<button type="button" id="btnConfirmar" onclick="confirmarAcao()"
-				style="display: none;">Confirmar</button>
+					<!-- Barra de pesquisa -->
+					<div class="barra-pesquisa">
+						<span class="icone-lupa">🔍</span>
 
-			<button type="button" id="btnCancelar" onclick="cancelarSelecao()"
-				style="display: none;">Cancelar</button>
-		</div>
+						<input type="text" id="campoPesquisa" placeholder="Buscar...">
+					</div>
 
-		<hr>
+					<!-- Área com rolagem horizontal -->
+					<!-- Área com rolagem horizontal e vertical -->
+<div class="tabela-scroll">
 
-		<!-- Formulário usado para edição e exclusão -->
-		<form id="formSelecao" method="post">
+	<table>
 
+		<thead>
+			<tr>
+				<th class="coluna-selecao" style="display: none;">Selecionar</th>
+				<th>ID</th>
+				<th>Nome</th>
+				<th>Rua</th>
+				<th>Cidade</th>
+				<th>Estado</th>
+				<th>CEP</th>
+				<th>Celular</th>
+				<th>E-mail</th>
+			</tr>
+		</thead>
 
-			<div>
-				<label>Pesquisar cliente:</label> <br> <input type="text"
-					id="campoPesquisa" placeholder="Digite o nome do cliente">
+		<tbody>
+
+			<tr th:each="cliente : ${clientes}" class="linha-cliente">
+
+				<!-- Checkbox escondido até ativar editar/excluir -->
+				<td class="coluna-selecao" style="display: none;">
+					<input type="checkbox" name="idsSelecionados"
+						th:value="${cliente.idCliente}">
+				</td>
+
+				<td th:text="${cliente.idCliente}"></td>
+
+				<td class="nome-cliente" th:text="${cliente.nome}"></td>
+
+				<td
+					th:text="${cliente.endereco != null ? cliente.endereco.rua : '-'}">
+				</td>
+
+				<td
+					th:text="${cliente.endereco != null ? cliente.endereco.cidade : '-'}">
+				</td>
+
+				<td
+					th:text="${cliente.endereco != null ? cliente.endereco.estado : '-'}">
+				</td>
+
+				<td
+					th:text="${cliente.endereco != null ? cliente.endereco.cep : '-'}">
+				</td>
+
+				<td
+					th:text="${cliente.contato != null ? cliente.contato.celular : '-'}">
+				</td>
+
+				<td
+					th:text="${cliente.contato != null ? cliente.contato.email : '-'}">
+				</td>
+
+			</tr>
+
+		</tbody>
+
+	</table>
+
+</div>
+
+				</form>
+
 			</div>
 
-			<table border="1">
+			<!-- Área direita -->
+			<div class="area-botoes">
 
-				<thead>
-					<tr>
-						<th class="coluna-selecao" style="display: none;">Selecionar</th>
-						<th>ID</th>
-						<th>Nome</th>
-						<th>Rua</th>
-						<th>Cidade</th>
-						<th>Estado</th>
-						<th>CEP</th>
-						<th>Celular</th>
-						<th>E-mail</th>
-					</tr>
-				</thead>
+				<a href="/clientes/novo">
+<button type="button" id="btnCadastrar"> <img src="/img/icone-cadastrar.png" class="icone-botao"> <span>Cadastrar </span> </button>
+</a>
 
-				<tbody>
+				<button type="button" id="btnEditar" onclick="ativarModoEditar()">
+	<img src="/img/icone-editar.png" class="icone-botao">
+	<span> Editar </span>
+</button>
 
-					<tr th:each="cliente : ${clientes}" class="linha-cliente">
+				<button type="button" id="btnExcluir" onclick="ativarModoExcluir()">
+	<img src="/img/icone-excluir.png" class="icone-botao">
+	<span> Excluir </span>
+</button>
+				<button type="button" id="btnConfirmar" onclick="confirmarAcao()"
+					style="display: none;">Confirmar</button>
 
-						<!-- Checkbox escondido até ativar editar/excluir -->
-						<td class="coluna-selecao" style="display: none;"><input
-							type="checkbox" name="idsSelecionados"
-							th:value="${cliente.idCliente}"></td>
+				<button type="button" id="btnCancelar" onclick="cancelarSelecao()"
+					style="display: none;">Cancelar</button>
 
-						<td th:text="${cliente.idCliente}"></td>
+			</div>
 
-						<td class="nome-cliente" th:text="${cliente.nome}"></td>
-
-						<td
-							th:text="${cliente.endereco != null ? cliente.endereco.rua : '-'}"></td>
-
-						<td
-							th:text="${cliente.endereco != null ? cliente.endereco.cidade : '-'}"></td>
-
-						<td
-							th:text="${cliente.endereco != null ? cliente.endereco.estado : '-'}"></td>
-
-						<td
-							th:text="${cliente.endereco != null ? cliente.endereco.cep : '-'}"></td>
-
-						<td
-							th:text="${cliente.contato != null ? cliente.contato.celular : '-'}"></td>
-
-						<td
-							th:text="${cliente.contato != null ? cliente.contato.email : '-'}"></td>
-
-					</tr>
-
-				</tbody>
-
-			</table>
-
-		</form>
+		</div>
 
 	</main>
 
 	<script>
-		/*
-		 * Guarda o modo atual da tela.
-		 * Pode ser: editar ou excluir.
-		 */
 		let modoAtual = "";
 
-		/*
-		 * Mostra os checkboxes da tabela.
-		 */
 		function mostrarSelecao() {
-
-			document.querySelectorAll(".coluna-selecao").forEach(
-					function(coluna) {
-						coluna.style.display = "table-cell";
-					});
+			document.querySelectorAll(".coluna-selecao").forEach(function(coluna) {
+				coluna.style.display = "table-cell";
+			});
 
 			document.getElementById("btnConfirmar").style.display = "inline-block";
 			document.getElementById("btnCancelar").style.display = "inline-block";
 		}
 
-		/*
-		 * Ativa modo de edição.
-		 * Neste modo o usuário deve selecionar apenas um cliente.
-		 */
 		function ativarModoEditar() {
-
 			modoAtual = "editar";
 			mostrarSelecao();
 		}
 
-		/*
-		 * Ativa modo de exclusão.
-		 * Neste modo o usuário pode selecionar vários clientes.
-		 */
 		function ativarModoExcluir() {
-
 			modoAtual = "excluir";
 			mostrarSelecao();
 		}
 
-		/*
-		 * Cancela seleção e limpa os checkboxes.
-		 */
 		function cancelarSelecao() {
-
 			modoAtual = "";
 
-			document.querySelectorAll("input[name='idsSelecionados']").forEach(
-					function(checkbox) {
-						checkbox.checked = false;
-					});
+			document.querySelectorAll("input[name='idsSelecionados']").forEach(function(checkbox) {
+				checkbox.checked = false;
+			});
 
-			document.querySelectorAll(".coluna-selecao").forEach(
-					function(coluna) {
-						coluna.style.display = "none";
-					});
+			document.querySelectorAll(".coluna-selecao").forEach(function(coluna) {
+				coluna.style.display = "none";
+			});
 
 			document.getElementById("btnConfirmar").style.display = "none";
 			document.getElementById("btnCancelar").style.display = "none";
 		}
 
-		/*
-		 * Confirma edição ou exclusão.
-		 */
 		function confirmarAcao() {
-
-			const selecionados = document
-					.querySelectorAll("input[name='idsSelecionados']:checked");
+			const selecionados = document.querySelectorAll("input[name='idsSelecionados']:checked");
 
 			if (selecionados.length === 0) {
 				alert("Selecione pelo menos um cliente.");
@@ -181,19 +179,16 @@
 			}
 
 			if (modoAtual === "editar") {
-
 				if (selecionados.length > 1) {
 					alert("Para editar, selecione apenas um cliente.");
 					return;
 				}
 
 				const id = selecionados[0].value;
-
 				window.location.href = "/clientes/editar?id=" + id;
 			}
 
 			if (modoAtual === "excluir") {
-
 				const confirmar = confirm("Deseja realmente excluir os clientes selecionados?");
 
 				if (!confirmar) {
@@ -207,43 +202,20 @@
 			}
 		}
 
-		//Barra de pesquisa:
+		document.getElementById("campoPesquisa").addEventListener("input", function() {
+			const textoBusca = this.value.toLowerCase();
+			const linhas = document.querySelectorAll(".linha-cliente");
 
-		/*
-		 * Busca em tempo real por nome do cliente.
-		 * Conforme o usuário digita, a tabela é filtrada automaticamente.
-		 */
-		document.getElementById("campoPesquisa").addEventListener(
-				"input",
-				function() {
+			linhas.forEach(function(linha) {
+				const nomeCliente = linha.querySelector(".nome-cliente").textContent.toLowerCase();
 
-					// Texto digitado no campo
-					const textoBusca = this.value.toLowerCase();
-
-					// Todas as linhas da tabela
-					const linhas = document.querySelectorAll(".linha-cliente");
-
-					// Percorre todas as linhas
-					linhas.forEach(function(linha) {
-
-						// Nome do cliente da linha atual
-						const nomeCliente = linha
-								.querySelector(".nome-cliente").textContent
-								.toLowerCase();
-
-						// Verifica se o nome contém o texto digitado
-						if (nomeCliente.includes(textoBusca)) {
-
-							// Mostra linha
-							linha.style.display = "";
-
-						} else {
-
-							// Esconde linha
-							linha.style.display = "none";
-						}
-					});
-				});
+				if (nomeCliente.includes(textoBusca)) {
+					linha.style.display = "";
+				} else {
+					linha.style.display = "none";
+				}
+			});
+		});
 	</script>
 
 </body>

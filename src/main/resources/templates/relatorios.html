@@ -2,73 +2,157 @@
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-
-<!-- Importa o CSS principal do sistema -->
-<link rel="stylesheet" href="/css/style.css">
 <meta charset="UTF-8">
 <title>Relatórios - PetStock</title>
+
+<!-- CSS global -->
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/header.css">
+<link rel="stylesheet" href="/css/relatorios.css">
 </head>
 
 <body>
-	<!-- Insere o cabeçalho padrão -->
+
+	<!-- Cabeçalho padrão -->
 	<div th:replace="~{fragments/header :: header}"></div>
 
-	<!-- Conteúdo principal da página -->
 	<main class="conteudo">
 
-		<h1>Relatórios</h1>
+		<!-- Filtros -->
+		<section class="area-filtros">
 
-		<!-- Filtros do relatório de vendas -->
-		<section>
-			<label>Data inicial:</label> <input type="date" id="dataInicial">
+			<div>
+				<label>Data inicial:</label>
 
-			<label>Data final:</label> <input type="date" id="dataFinal">
+				<input type="date" id="dataInicial">
+			</div>
 
-			<label>Cliente:</label> <input list="listaClientes"
-				id="clienteFiltro" placeholder="Digite o nome do cliente">
+			<div>
+				<label>Data final:</label>
 
-			<datalist id="listaClientes">
-				<option th:each="cliente : ${clientes}" th:value="${cliente.nome}">
-				</option>
-			</datalist>
+				<input type="date" id="dataFinal">
+			</div>
 
-			<button type="button" onclick="filtrarVendas()">Buscar</button>
-			<button type="button" onclick="limparFiltros()">Limpar</button>
+			<div>
+				<label>Cliente:</label>
+
+				<input list="listaClientes"
+					id="clienteFiltro"
+					placeholder="Digite o nome do cliente">
+
+				<datalist id="listaClientes">
+					<option th:each="cliente : ${clientes}"
+						th:value="${cliente.nome}">
+					</option>
+				</datalist>
+			</div>
+
+			<button type="button" onclick="filtrarVendas()">
+				Buscar
+			</button>
+
+			<button type="button" onclick="limparFiltros()">
+				Limpar
+			</button>
+
 		</section>
 
+		<div class="layout-relatorios">
 
-		<!-- Tabela principal com as vendas realizadas -->
-		<section>
-			<h2>Vendas realizadas</h2>
+			<!-- Vendas realizadas -->
+			<section class="area-vendas">
 
-			<table border="1">
-				<thead>
-					<tr>
-						<th>Selecionar</th>
-						<th>ID</th>
-						<th>Data</th>
-						<th>Cliente</th>
-						<th>Total</th>
-					</tr>
-				</thead>
+				<h2>Vendas realizadas</h2>
 
-				<tbody>
-					<tr th:each="venda : ${vendas}" class="linha-venda"
-						th:data-id="${venda.idVenda}" th:data-data="${venda.dataVenda}"
-						th:data-cliente="${venda.cliente != null ? venda.cliente.nome : 'Sem cliente'}"
-						th:data-total="${venda.valorTotal}">
+				<div class="tabela-scroll">
 
-						<td><input type="radio" name="vendaSelecionada"
-							onchange="selecionarVenda(this.closest('tr'))"></td>
-						<td th:text="${venda.idVenda}"></td>
-						<td th:text="${venda.dataVenda}"></td>
-						<td
-							th:text="${venda.cliente != null ? venda.cliente.nome : 'Sem cliente'}"></td>
-						<td th:text="${venda.valorTotal}"></td>
-					</tr>
-				</tbody>
-			</table>
-		</section>
+					<table>
+
+						<thead>
+							<tr>
+								<th>Selecionar</th>
+								<th>ID</th>
+								<th>Data</th>
+								<th>Cliente</th>
+								<th>Total</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr th:each="venda : ${vendas}" class="linha-venda"
+								th:data-id="${venda.idVenda}"
+								th:data-data="${venda.dataVenda}"
+								th:data-cliente="${venda.cliente != null ? venda.cliente.nome : 'Sem cliente'}"
+								th:data-total="${venda.valorTotal}">
+
+								<td>
+									<input type="radio" name="vendaSelecionada"
+										onchange="selecionarVenda(this.closest('tr'))">
+								</td>
+
+								<td th:text="${venda.idVenda}"></td>
+
+								<td th:text="${venda.dataVenda}"></td>
+
+								<td
+									th:text="${venda.cliente != null ? venda.cliente.nome : 'Sem cliente'}">
+								</td>
+
+								<td th:text="${venda.valorTotal}"></td>
+
+							</tr>
+						</tbody>
+
+					</table>
+
+				</div>
+
+			</section>
+
+			<!-- Itens da venda -->
+			<section class="area-itens">
+
+				<h2>Itens da venda selecionada</h2>
+
+				<div class="tabela-scroll">
+
+					<table>
+
+						<thead>
+							<tr>
+								<th>Produto</th>
+								<th>Quantidade</th>
+								<th>Preço Unitário</th>
+								<th>Subtotal</th>
+							</tr>
+						</thead>
+
+						<tbody id="tabelaItens">
+							<tr>
+								<td colspan="4">Selecione uma venda ao lado.</td>
+							</tr>
+						</tbody>
+
+					</table>
+
+				</div>
+
+				<div class="area-total-relatorio">
+					<span>Total da venda:</span>
+					<strong>R$ <span id="totalVendaSelecionada">0.00</span></strong>
+				</div>
+
+				<button type="button"
+					class="btn-excluir-venda"
+					onclick="excluirVendaSelecionada()">
+
+					Excluir Venda
+
+				</button>
+
+			</section>
+
+		</div>
 
 		<!-- Dados escondidos dos itens de cada venda -->
 		<div style="display: none;">
@@ -80,43 +164,12 @@
 					th:data-produto="${item.produto.nome}"
 					th:data-quantidade="${item.quantidade}"
 					th:data-preco="${item.precoUnitario}"
-					th:data-subtotal="${item.precoUnitario * item.quantidade}"></div>
+					th:data-subtotal="${item.precoUnitario * item.quantidade}">
+				</div>
 
 			</div>
 
 		</div>
-
-		<!-- Detalhes da venda selecionada -->
-		<section>
-			<h2>Itens da venda selecionada</h2>
-
-			<table border="1">
-				<thead>
-					<tr>
-						<th>Produto</th>
-						<th>Quantidade</th>
-						<th>Preço Unitário</th>
-						<th>Subtotal</th>
-					</tr>
-				</thead>
-
-				<tbody id="tabelaItens">
-					<tr>
-						<td colspan="4">Selecione uma venda acima.</td>
-					</tr>
-				</tbody>
-			</table>
-
-			<h3>
-				Total da venda: R$ <span id="totalVendaSelecionada">0.00</span>
-			</h3>
-
-			<button type="button" onclick="excluirVendaSelecionada()">
-				Excluir Venda</button>
-		</section>
-
-
-		<hr>
 
 	</main>
 
@@ -137,10 +190,7 @@
 
 			carregarItensVenda(vendaSelecionadaId);
 		}
-		
-		/*
-		 * Carrega os itens da venda selecionada na tabela inferior.
-		 */
+
 		function carregarItensVenda(idVenda) {
 
 			const tabelaItens = document.getElementById("tabelaItens");
@@ -173,9 +223,6 @@
 			});
 		}
 
-		/*
-		 * Filtra a tabela de vendas por data inicial, data final e cliente.
-		 */
 		function filtrarVendas() {
 
 			const dataInicial = document.getElementById("dataInicial").value;
@@ -193,23 +240,14 @@
 
 				let mostrar = true;
 
-				/*
-				 * Se tiver data inicial, oculta vendas anteriores.
-				 */
 				if (dataInicial !== "" && dataVenda < dataInicial) {
 					mostrar = false;
 				}
 
-				/*
-				 * Se tiver data final, oculta vendas posteriores.
-				 */
 				if (dataFinal !== "" && dataVenda > dataFinal) {
 					mostrar = false;
 				}
 
-				/*
-				 * Se tiver cliente informado, filtra pelo nome.
-				 */
 				if (clienteFiltro !== ""
 						&& !clienteVenda.includes(clienteFiltro)) {
 					mostrar = false;
@@ -233,10 +271,6 @@
 			});
 		}
 
-		/*
-		 * Exclui a venda selecionada.
-		 * Não devolve os itens ao estoque neste momento.
-		 */
 		function excluirVendaSelecionada() {
 
 			if (vendaSelecionadaId == null) {
@@ -253,6 +287,7 @@
 			window.location.href = "/relatorios/excluir?id=" + vendaSelecionadaId;
 		}
 	</script>
+
 </body>
 
 </html>

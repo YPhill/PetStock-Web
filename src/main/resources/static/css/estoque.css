@@ -1,0 +1,152 @@
+/* Layout principal */
+.layout-estoque {
+	display: flex;
+	gap: 30px;
+	align-items: flex-start;
+}
+
+/* Área da tabela */
+.area-tabela {
+	flex: 1;
+	background-color: #F8F4F4;
+	padding: 20px;
+	border-radius: 20px;
+	min-height: 580px;
+}
+
+/* Barra de pesquisa */
+.barra-pesquisa {
+	display: flex;
+	align-items: center;
+	background-color: #EFEAEA;
+	border-radius: 15px;
+	padding: 12px 18px;
+	margin-bottom: 25px;
+}
+
+/* Ícone da lupa */
+.icone-lupa {
+	font-size: 22px;
+	margin-right: 12px;
+	color: #7A5C3E;
+}
+
+/* Campo de pesquisa */
+.barra-pesquisa input {
+	border: none;
+	background: transparent;
+	outline: none;
+	width: 100%;
+	font-size: 18px;
+	color: #555;
+}
+
+/* Área com scroll */
+.tabela-scroll {
+	width: 100%;
+	overflow-x: auto;
+	overflow-y: auto;
+	max-height: 470px;
+	border-radius: 12px;
+}
+
+/* Tabela */
+table {
+	width: 100%;
+	min-width: 950px;
+	border-collapse: collapse;
+	background-color: white;
+	border-radius: 12px;
+	overflow: hidden;
+}
+
+/* Cabeçalho da tabela */
+thead {
+	background-color: #9A7653;
+	color: white;
+}
+
+thead th {
+	padding: 14px;
+	font-size: 16px;
+	font-weight: bold;
+	text-align: center;
+}
+
+/* Linhas da tabela */
+tbody td {
+	padding: 14px;
+	text-align: center;
+	border-bottom: 1px solid #E5E5E5;
+	font-size: 15px;
+	color: #444;
+}
+
+/* Hover da tabela */
+tbody tr:hover {
+	background-color: #F5F1EE;
+}
+
+/* Área dos botões */
+.area-botoes {
+	width: 210px;
+	background-color: #F8F4F4;
+	border-radius: 20px;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	min-height: 580px;
+}
+
+/* Botões */
+.area-botoes button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+
+	background-color: #B37A45;
+	color: white;
+
+	border: none;
+	border-radius: 16px;
+
+	padding: 18px;
+	font-size: 20px;
+	font-weight: bold;
+
+	cursor: pointer;
+	transition: 0.2s;
+}
+
+/* Hover dos botões */
+.area-botoes button:hover {
+	background-color: #9A6537;
+	transform: scale(1.02);
+}
+
+/* Ícones dos botões */
+.icone-botao {
+	width: 24px;
+	height: 24px;
+	object-fit: contain;
+}
+
+/* Responsividade */
+@media (max-width: 1100px) {
+
+	.layout-estoque {
+		flex-direction: column;
+	}
+
+	.area-botoes {
+		width: 100%;
+		min-height: auto;
+		flex-direction: row;
+	}
+
+	.area-botoes button {
+		flex: 1;
+	}
+}

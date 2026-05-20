@@ -1,93 +1,155 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-
-<!-- Importa o CSS principal do sistema -->
-<link rel="stylesheet" href="/css/style.css">
-
 <meta charset="UTF-8">
 <title>Fornecedores - PetStock</title>
+
+<!-- CSS global -->
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/header.css">
+<link rel="stylesheet" href="/css/fornecedores.css">
 </head>
 
 <body>
-	<!-- Insere o cabeçalho padrão -->
+
+	<!-- Cabeçalho padrão -->
 	<div th:replace="~{fragments/header :: header}"></div>
 
-	<!-- Conteúdo principal da página -->
 	<main class="conteudo">
 
-
-
-		<h1>Fornecedores</h1>
 		<p th:if="${erro}" th:text="${erro}" style="color: red;"></p>
 
-		<div>
-			<a href="/fornecedores/novo">
-				<button type="button">Cadastrar</button>
-			</a>
+		<div class="layout-fornecedores">
 
-			<button type="button" onclick="ativarModoEditar()">Editar</button>
+			<!-- Área esquerda -->
+			<div class="area-tabela">
 
-			<button type="button" onclick="ativarModoExcluir()">Excluir</button>
+				<!-- Formulário usado para edição e exclusão -->
+				<form id="formSelecao" method="post">
 
-			<button type="button" id="btnConfirmar" onclick="confirmarAcao()"
-				style="display: none;">Confirmar</button>
+					<!-- Barra de pesquisa -->
+					<div class="barra-pesquisa">
+						<span class="icone-lupa">🔍</span>
 
-			<button type="button" id="btnCancelar" onclick="cancelarSelecao()"
-				style="display: none;">Cancelar</button>
+						<input type="text" id="campoPesquisa" placeholder="Buscar...">
+					</div>
+
+					<!-- Área com rolagem horizontal e vertical -->
+					<div class="tabela-scroll">
+
+						<table>
+
+							<thead>
+								<tr>
+									<th class="coluna-selecao" style="display: none;">Selecionar</th>
+									<th>ID</th>
+									<th>Nome Fantasia</th>
+									<th>CNPJ</th>
+									<th>Contrato Social</th>
+									<th>Rua</th>
+									<th>Cidade</th>
+									<th>Estado</th>
+									<th>CEP</th>
+									<th>Telefone</th>
+									<th>Celular</th>
+									<th>E-mail</th>
+								</tr>
+							</thead>
+
+							<tbody>
+
+								<tbody>
+
+	<tr th:each="fornecedor : ${fornecedores}"
+		class="linha-fornecedor">
+
+		<td class="coluna-selecao" style="display: none;">
+			<input type="checkbox" name="idsSelecionados"
+				th:value="${fornecedor.idFornecedor}">
+		</td>
+
+		<td th:text="${fornecedor.idFornecedor}"></td>
+
+		<td class="nome-fornecedor"
+			th:text="${fornecedor.nomeFantasia}">
+		</td>
+
+		<td th:text="${fornecedor.cnpj}"></td>
+
+		<td th:text="${fornecedor.contratoSocial}"></td>
+
+		<td
+			th:text="${fornecedor.endereco != null ? fornecedor.endereco.rua : '-'}">
+		</td>
+
+		<td
+			th:text="${fornecedor.endereco != null ? fornecedor.endereco.cidade : '-'}">
+		</td>
+
+		<td
+			th:text="${fornecedor.endereco != null ? fornecedor.endereco.estado : '-'}">
+		</td>
+
+		<td
+			th:text="${fornecedor.endereco != null ? fornecedor.endereco.cep : '-'}">
+		</td>
+
+		<td
+			th:text="${fornecedor.contato != null ? fornecedor.contato.telefone : '-'}">
+		</td>
+
+		<td
+			th:text="${fornecedor.contato != null ? fornecedor.contato.celular : '-'}">
+		</td>
+
+		<td
+			th:text="${fornecedor.contato != null ? fornecedor.contato.email : '-'}">
+		</td>
+
+	</tr>
+
+</tbody>
+
+							</tbody>
+
+						</table>
+
+					</div>
+
+				</form>
+
+			</div>
+
+			<!-- Área direita -->
+			<div class="area-botoes">
+
+				<a href="/fornecedores/novo">
+					<button type="button" id="btnCadastrar">
+						<img src="/img/icone-cadastrar.png" class="icone-botao">
+						<span>Cadastrar</span>
+					</button>
+				</a>
+
+				<button type="button" id="btnEditar" onclick="ativarModoEditar()">
+					<img src="/img/icone-editar.png" class="icone-botao">
+					<span>Editar</span>
+				</button>
+
+				<button type="button" id="btnExcluir" onclick="ativarModoExcluir()">
+					<img src="/img/icone-excluir.png" class="icone-botao">
+					<span>Excluir</span>
+				</button>
+
+				<button type="button" id="btnConfirmar" onclick="confirmarAcao()"
+					style="display: none;">Confirmar</button>
+
+				<button type="button" id="btnCancelar" onclick="cancelarSelecao()"
+					style="display: none;">Cancelar</button>
+
+			</div>
+
 		</div>
-
-		<div>
-			<label>Pesquisar fornecedor:</label> <br> <input type="text"
-				id="campoPesquisa" placeholder="Digite o nome fantasia">
-		</div>
-
-		<hr>
-
-		<form id="formSelecao" method="post">
-
-			<table border="1">
-
-				<thead>
-					<tr>
-						<th class="coluna-selecao" style="display: none;">Selecionar</th>
-						<th>ID</th>
-						<th>Nome Fantasia</th>
-						<th>CNPJ</th>
-						<th>Cidade</th>
-						<th>Email</th>
-					</tr>
-				</thead>
-
-				<tbody>
-
-					<tr th:each="fornecedor : ${fornecedores}" class="linha-fornecedor">
-
-						<td class="coluna-selecao" style="display: none;"><input
-							type="checkbox" name="idsSelecionados"
-							th:value="${fornecedor.idFornecedor}"></td>
-
-						<td th:text="${fornecedor.idFornecedor}"></td>
-
-						<td class="nome-fornecedor" th:text="${fornecedor.nomeFantasia}"></td>
-
-						<td th:text="${fornecedor.cnpj}"></td>
-
-						<td
-							th:text="${fornecedor.endereco != null ? fornecedor.endereco.cidade : '-'}"></td>
-
-						<td
-							th:text="${fornecedor.contato != null ? fornecedor.contato.email : '-'}"></td>
-
-					</tr>
-
-				</tbody>
-
-			</table>
-
-		</form>
-
 
 	</main>
 
@@ -95,10 +157,9 @@
 		let modoAtual = "";
 
 		function mostrarSelecao() {
-			document.querySelectorAll(".coluna-selecao").forEach(
-					function(coluna) {
-						coluna.style.display = "table-cell";
-					});
+			document.querySelectorAll(".coluna-selecao").forEach(function(coluna) {
+				coluna.style.display = "table-cell";
+			});
 
 			document.getElementById("btnConfirmar").style.display = "inline-block";
 			document.getElementById("btnCancelar").style.display = "inline-block";
@@ -117,23 +178,20 @@
 		function cancelarSelecao() {
 			modoAtual = "";
 
-			document.querySelectorAll("input[name='idsSelecionados']").forEach(
-					function(checkbox) {
-						checkbox.checked = false;
-					});
+			document.querySelectorAll("input[name='idsSelecionados']").forEach(function(checkbox) {
+				checkbox.checked = false;
+			});
 
-			document.querySelectorAll(".coluna-selecao").forEach(
-					function(coluna) {
-						coluna.style.display = "none";
-					});
+			document.querySelectorAll(".coluna-selecao").forEach(function(coluna) {
+				coluna.style.display = "none";
+			});
 
 			document.getElementById("btnConfirmar").style.display = "none";
 			document.getElementById("btnCancelar").style.display = "none";
 		}
 
 		function confirmarAcao() {
-			const selecionados = document
-					.querySelectorAll("input[name='idsSelecionados']:checked");
+			const selecionados = document.querySelectorAll("input[name='idsSelecionados']:checked");
 
 			if (selecionados.length === 0) {
 				alert("Selecione pelo menos um fornecedor.");
@@ -158,32 +216,27 @@
 				}
 
 				const form = document.getElementById("formSelecao");
+
 				form.action = "/fornecedores/excluir";
 				form.submit();
 			}
 		}
 
-		document.getElementById("campoPesquisa").addEventListener(
-				"input",
-				function() {
-					const textoBusca = this.value.toLowerCase();
-					const linhas = document
-							.querySelectorAll(".linha-fornecedor");
+		document.getElementById("campoPesquisa").addEventListener("input", function() {
+			const textoBusca = this.value.toLowerCase();
+			const linhas = document.querySelectorAll(".linha-fornecedor");
 
-					linhas.forEach(function(linha) {
-						const nomeFornecedor = linha
-								.querySelector(".nome-fornecedor").textContent
-								.toLowerCase();
+			linhas.forEach(function(linha) {
+				const nomeFornecedor = linha.querySelector(".nome-fornecedor").textContent.toLowerCase();
 
-						if (nomeFornecedor.includes(textoBusca)) {
-							linha.style.display = "";
-						} else {
-							linha.style.display = "none";
-						}
-					});
-				});
+				if (nomeFornecedor.includes(textoBusca)) {
+					linha.style.display = "";
+				} else {
+					linha.style.display = "none";
+				}
+			});
+		});
 	</script>
-
 
 </body>
 

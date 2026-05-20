@@ -1,0 +1,66 @@
+/* Área inicial */
+.inicio-apresentacao {
+	background-color: #fffdfb;
+	border-radius: 20px;
+	padding: 35px;
+	margin-bottom: 30px;
+}
+
+/* Título principal */
+.inicio-apresentacao h1 {
+	font-size: 42px;
+	color: #7b6048;
+	margin-bottom: 12px;
+}
+
+/* Texto inicial */
+.inicio-apresentacao p {
+	font-size: 18px;
+	color: #6f6f6f;
+	line-height: 1.6;
+}
+
+/* Grid dos cards */
+.cards-inicio {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 24px;
+}
+
+/* Card */
+.card-inicio {
+	background-color: #fffdfb;
+	border-radius: 18px;
+	padding: 28px;
+	text-decoration: none;
+	box-sizing: border-box;
+	transition: 0.2s;
+	border: 2px solid transparent;
+}
+
+/* Hover do card */
+.card-inicio:hover {
+	transform: translateY(-4px);
+	border-color: #cba27c;
+}
+
+/* Ícone */
+.card-inicio span {
+	font-size: 42px;
+	display: block;
+	margin-bottom: 18px;
+}
+
+/* Título do card */
+.card-inicio h2 {
+	font-size: 24px;
+	color: #7b6048;
+	margin-bottom: 10px;
+}
+
+/* Texto do card */
+.card-inicio p {
+	font-size: 15px;
+	color: #6f6f6f;
+	line-height: 1.5;
+}

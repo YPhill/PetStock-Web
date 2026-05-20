@@ -2,11 +2,13 @@
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8">
-	<title>Produto - PetStock</title>
+<meta charset="UTF-8">
+<title>Produto - PetStock</title>
 
-	<!-- Importa o CSS principal -->
-	<link rel="stylesheet" href="/css/style.css">
+<!-- CSS global -->
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/header.css">
+<link rel="stylesheet" href="/css/formularios.css">
 </head>
 
 <body>
@@ -16,78 +18,102 @@
 
 	<main class="conteudo">
 
-		<h1>Produto</h1>
+		<h1>Cadastrar Produto</h1>
 
-		<!-- Formulário de cadastro/edição de produto -->
+		<!-- Formulário -->
 		<form th:action="@{/produtos/salvar}" th:object="${produto}" method="post">
 
 			<!-- ID escondido usado na edição -->
 			<input type="hidden" th:field="*{idProduto}">
 
-			<!-- Nome do produto -->
-			<div>
-				<label>Nome:</label>
-				<br>
-				<input type="text" th:field="*{nome}" required>
-			</div>
+			<!-- Divisão do formulário em duas colunas -->
+			<div class="grid-formulario">
 
-			<br>
+				<!-- Nome do produto -->
+				<div>
+					<label>Nome:</label>
 
-			<!-- Categoria do produto -->
-			<div>
-				<label>Categoria:</label>
-				<br>
-				<input type="text" th:field="*{categoria}">
-			</div>
+					<input type="text"
+						th:field="*{nome}"
+						placeholder="Digite o nome do produto"
+						required>
+				</div>
 
-			<br>
+				<!-- Categoria do produto -->
+				<div>
+					<label>Categoria:</label>
 
-			<!-- Preço do produto -->
-			<div>
-				<label>Preço:</label>
-				<br>
-				<input type="number" step="0.01" th:field="*{preco}" required>
-			</div>
+					<input type="text"
+						th:field="*{categoria}"
+						placeholder="Digite a categoria"
+						required>
+				</div>
 
-			<br>
+				<!-- Preço do produto -->
+				<div>
+					<label>Preço:</label>
 
-			<!-- Marca do produto -->
-			<div>
-				<label>Marca:</label>
-				<br>
-				<input type="text" th:field="*{marca}">
-			</div>
+					<input type="number"
+						step="0.01"
+						min="0.01"
+						th:field="*{preco}"
+						placeholder="Digite o preço"
+						required>
+				</div>
 
-			<br>
+				<!-- Marca do produto -->
+				<div>
+					<label>Marca:</label>
 
-			<!-- Validade do produto -->
-			<div>
-				<label>Validade:</label>
-				<br>
-				<input type="date" th:field="*{validade}">
-			</div>
+					<input type="text"
+						th:field="*{marca}"
+						placeholder="Digite a marca"
+						required>
+				</div>
 
-			<br>
+				<!-- Validade do produto -->
+				<div>
+					<label>Validade:</label>
 
-			<!-- Fornecedor vinculado ao produto -->
-			<div>
-				<label>Fornecedor:</label>
-				<br>
+					<input type="date"
+						th:field="*{validade}"
+						required>
+				</div>
 
-				<select th:field="*{fornecedor.idFornecedor}">
-					<option value="0">Sem fornecedor</option>
+				<!-- Fornecedor vinculado ao produto -->
+				<div>
+					<label>Fornecedor:</label>
 
-					<option th:each="fornecedor : ${fornecedores}"
+					<select th:field="*{fornecedor.idFornecedor}" required>
+
+						<option value="0">Selecione um fornecedor</option>
+
+						<option th:each="fornecedor : ${fornecedores}"
 							th:value="${fornecedor.idFornecedor}"
 							th:text="${fornecedor.nomeFantasia}">
-					</option>
-				</select>
+						</option>
+
+					</select>
+				</div>
+
 			</div>
 
-			<br>
+			<!-- Botões -->
+			<div class="grupo-botoes">
 
-			<!-- Botão de salvar -->
-			<button type="submit">Salvar Produto</button>
+				<button type="button"
+					class="btn-voltar"
+					onclick="window.location.href='/produtos'">
+
+					Voltar
+
+				</button>
+
+				<button type="submit">
+					Salvar Produto
+				</button>
+
+			</div>
 
 		</form>
 

@@ -2,90 +2,117 @@
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-
-<!-- Importa o CSS principal do sistema -->
-<link rel="stylesheet" href="/css/style.css">
 <meta charset="UTF-8">
 <title>Estoque - PetStock</title>
+
+<!-- CSS global -->
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/header.css">
+<link rel="stylesheet" href="/css/estoque.css">
 </head>
 
 <body>
-	<!-- Insere o cabeçalho padrão -->
+
+	<!-- Cabeçalho padrão -->
 	<div th:replace="~{fragments/header :: header}"></div>
 
-	<!-- Conteúdo principal da página -->
 	<main class="conteudo">
 
-		<h1>Estoque</h1>
-
-		<!-- Mensagem de erro das operações de estoque -->
 		<p th:if="${erro}" th:text="${erro}" style="color: red;"></p>
 
-		<!-- Campo de pesquisa em tempo real -->
-		<div>
-			<label>Pesquisar produto:</label> <br> <input type="text"
-				id="campoPesquisa" placeholder="Digite o nome do produto">
+		<div class="layout-estoque">
+
+			<!-- Área esquerda -->
+			<div class="area-tabela">
+
+				<!-- Barra de pesquisa -->
+				<div class="barra-pesquisa">
+					<span class="icone-lupa">🔍</span>
+
+					<input type="text" id="campoPesquisa" placeholder="Buscar...">
+				</div>
+
+				<!-- Área com rolagem horizontal e vertical -->
+				<div class="tabela-scroll">
+
+					<table>
+
+						<thead>
+							<tr>
+								<th>Selecionar</th>
+								<th>ID Produto</th>
+								<th>Produto</th>
+								<th>Categoria</th>
+								<th>Marca</th>
+								<th>Quantidade Atual</th>
+								<th>Status</th>
+							</tr>
+						</thead>
+
+						<tbody>
+
+							<tr th:each="estoque : ${estoques}" class="linha-estoque">
+
+								<!-- Seleciona apenas um produto para movimentar o estoque -->
+								<td>
+									<input type="radio" name="produtoSelecionado"
+										th:value="${estoque.produto.idProduto}"
+										th:data-nome="${estoque.produto.nome}">
+								</td>
+
+								<td th:text="${estoque.produto.idProduto}"></td>
+
+								<td class="nome-produto" th:text="${estoque.produto.nome}"></td>
+
+								<td
+									th:text="${estoque.produto.categoria != null ? estoque.produto.categoria : '-'}">
+								</td>
+
+								<td
+									th:text="${estoque.produto.marca != null ? estoque.produto.marca : '-'}">
+								</td>
+
+								<td th:text="${estoque.quantidadeAtual}"></td>
+
+								<td
+									th:text="${estoque.quantidadeAtual == 0 ? '🔴 Sem estoque' : (estoque.quantidadeAtual <= 10 ? '🟡 Baixo' : '🟢 Normal')}">
+								</td>
+
+							</tr>
+
+						</tbody>
+
+					</table>
+
+				</div>
+
+			</div>
+
+			<!-- Área direita -->
+			<div class="area-botoes">
+
+				<button type="button" id="btnEntrada"
+					onclick="prepararMovimento('entrada')">
+					<img src="/img/icone-cadastrar.png" class="icone-botao">
+					<span>Entrada</span>
+				</button>
+
+				<button type="button" id="btnAjustar"
+					onclick="prepararMovimento('ajustar')">
+					<img src="/img/icone-editar.png" class="icone-botao">
+					<span>Ajustar</span>
+				</button>
+
+				<button type="button" id="btnSaida"
+					onclick="prepararMovimento('saida')">
+					<img src="/img/icone-excluir.png" class="icone-botao">
+					<span>Saída</span>
+				</button>
+
+			</div>
+
 		</div>
 
-
-		<hr>
-
-		<table border="1">
-
-			<thead>
-				<tr>
-					<th>Selecionar</th>
-					<th>ID Produto</th>
-					<th>Produto</th>
-					<th>Categoria</th>
-					<th>Marca</th>
-					<th>Quantidade Atual</th>
-					<th>Status</th>
-				</tr>
-			</thead>
-
-			<tbody>
-
-				<tr th:each="estoque : ${estoques}" class="linha-estoque">
-
-					<!-- Seleciona apenas um produto para movimentar o estoque -->
-					<td><input type="radio" name="produtoSelecionado"
-						th:value="${estoque.produto.idProduto}"
-						th:data-nome="${estoque.produto.nome}"></td>
-
-					<td th:text="${estoque.produto.idProduto}"></td>
-
-					<td class="nome-produto" th:text="${estoque.produto.nome}"></td>
-
-					<td
-						th:text="${estoque.produto.categoria != null ? estoque.produto.categoria : '-'}"></td>
-
-					<td
-						th:text="${estoque.produto.marca != null ? estoque.produto.marca : '-'}"></td>
-
-					<td th:text="${estoque.quantidadeAtual}"></td>
-
-					<td
-						th:text="${estoque.quantidadeAtual == 0 ? '🔴 Sem estoque' : (estoque.quantidadeAtual <= 10 ? '🟡 Baixo' : '🟢 Normal')}"></td>
-
-					</td>
-				</tr>
-
-			</tbody>
-
-		</table>
-
-		<!-- Botões principais de movimentação do estoque -->
-		<div>
-			<button type="button" onclick="prepararMovimento('entrada')">
-				Entrada</button>
-
-			<button type="button" onclick="prepararMovimento('saida')">
-				Saída</button>
-
-			<button type="button" onclick="prepararMovimento('ajustar')">
-				Ajustar</button>
-		</div>
 	</main>
 
 	<script>
@@ -93,27 +120,20 @@
 		 * Busca em tempo real por nome do produto.
 		 * Conforme o usuário digita, a tabela de estoque é filtrada.
 		 */
-		document.getElementById("campoPesquisa").addEventListener(
-				"input",
-				function() {
+		document.getElementById("campoPesquisa").addEventListener("input", function() {
+			const textoBusca = this.value.toLowerCase();
+			const linhas = document.querySelectorAll(".linha-estoque");
 
-					const textoBusca = this.value.toLowerCase();
+			linhas.forEach(function(linha) {
+				const nomeProduto = linha.querySelector(".nome-produto").textContent.toLowerCase();
 
-					const linhas = document.querySelectorAll(".linha-estoque");
-
-					linhas.forEach(function(linha) {
-
-						const nomeProduto = linha
-								.querySelector(".nome-produto").textContent
-								.toLowerCase();
-
-						if (nomeProduto.includes(textoBusca)) {
-							linha.style.display = "";
-						} else {
-							linha.style.display = "none";
-						}
-					});
-				});
+				if (nomeProduto.includes(textoBusca)) {
+					linha.style.display = "";
+				} else {
+					linha.style.display = "none";
+				}
+			});
+		});
 
 		/*
 		 * Prepara a movimentação do estoque.
@@ -122,8 +142,7 @@
 		function prepararMovimento(acao) {
 
 			// Busca o produto selecionado na tabela
-			const selecionado = document
-					.querySelector("input[name='produtoSelecionado']:checked");
+			const selecionado = document.querySelector("input[name='produtoSelecionado']:checked");
 
 			if (!selecionado) {
 				alert("Selecione um produto na tabela.");
@@ -137,18 +156,15 @@
 			let mensagem = "";
 
 			if (acao === "entrada") {
-				mensagem = "Quantas unidades chegaram para o produto "
-						+ nomeProduto + "?";
+				mensagem = "Quantas unidades chegaram para o produto " + nomeProduto + "?";
 			}
 
 			if (acao === "saida") {
-				mensagem = "Quantas unidades saíram do produto " + nomeProduto
-						+ "?";
+				mensagem = "Quantas unidades saíram do produto " + nomeProduto + "?";
 			}
 
 			if (acao === "ajustar") {
-				mensagem = "Quantas unidades existem atualmente do produto "
-						+ nomeProduto + "?";
+				mensagem = "Quantas unidades existem atualmente do produto " + nomeProduto + "?";
 			}
 
 			// Abre uma caixa de mensagem para o usuário informar a quantidade
@@ -187,6 +203,7 @@
 			form.submit();
 		}
 	</script>
+
 </body>
 
 </html>

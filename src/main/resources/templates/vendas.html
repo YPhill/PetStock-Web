@@ -5,6 +5,8 @@
 
 <!-- Importa o CSS principal do sistema -->
 <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/header.css">
+<link rel="stylesheet" href="/css/vendas.css">
 <meta charset="UTF-8">
 <title>Vendas - PetStock</title>
 </head>
@@ -15,114 +17,151 @@
 
 	<!-- Conteúdo principal da página -->
 	<main class="conteudo">
-		<h1>Vendas</h1>
 
-		<!-- Data da venda puxada do computador do usuário -->
-		<p>
-			Data da venda: <span id="dataVenda"></span>
-		</p>
+	<div class="layout-vendas">
 
-		<!-- Área principal da venda -->
-		<section>
+		<!-- Área esquerda -->
+		<section class="area-form-venda">
 
-			<!-- Seleção do cliente -->
-			<div>
-				<label>Cliente:</label> <br> <input list="listaClientes"
-					id="clienteSelecionado" placeholder="Digite o nome do cliente">
-
-				<datalist id="listaClientes">
-					<option th:each="cliente : ${clientes}" th:value="${cliente.nome}"
-						th:data-id="${cliente.idCliente}"></option>
-				</datalist>
-
-				<br> <br> <label> <input type="checkbox"
-					id="vendaSemCliente"> Venda sem cliente
-				</label> <br> <br> <a href="/clientes/novo?origem=vendas">
-					<button type="button">Novo Cliente</button>
-				</a>
+			<!-- Venda sem cliente -->
+			<div class="campo-checkbox">
+				<input type="checkbox" id="vendaSemCliente">
+				<label>Venda sem cliente</label>
 			</div>
 
-			<hr>
-
-			<!-- Seleção do produto -->
+			<!-- Cliente -->
 			<div>
-				<label>Produto:</label> <br> <input list="listaProdutos"
-					id="produtoSelecionado" placeholder="Digite o nome do produto"
+				<label>Cliente</label>
+
+				<input list="listaClientes"
+					id="clienteSelecionado"
+					placeholder="Digite o nome do cliente">
+
+				<datalist id="listaClientes">
+					<option th:each="cliente : ${clientes}"
+						th:value="${cliente.nome}"
+						th:data-id="${cliente.idCliente}">
+					</option>
+				</datalist>
+			</div>
+
+		
+
+			<!-- Produto -->
+			<div>
+				<label>Produto</label>
+
+				<input list="listaProdutos"
+					id="produtoSelecionado"
+					placeholder="Digite o nome do produto"
 					onchange="preencherProduto()">
 
 				<datalist id="listaProdutos">
 					<option th:each="produto : ${produtos}"
 						th:value="${produto.nome + ' (' + (produto.estoque != null ? produto.estoque.quantidadeAtual : 0) + ')'}"
 						th:data-nome-real="${produto.nome}"
-						th:data-id="${produto.idProduto}" th:data-preco="${produto.preco}"
+						th:data-id="${produto.idProduto}"
+						th:data-preco="${produto.preco}"
 						th:data-estoque="${produto.estoque != null ? produto.estoque.quantidadeAtual : 0}"
 						th:data-estoque-original="${produto.estoque != null ? produto.estoque.quantidadeAtual : 0}">
 					</option>
 				</datalist>
 			</div>
 
-			<br>
-
-			<!-- Preço e quantidade -->
+			<!-- Preço -->
 			<div>
-				<label>Preço:</label> <br> <input type="text" id="precoProduto"
-					readonly>
+				<label>Preço</label>
+
+				<input type="text" id="precoProduto" readonly>
 			</div>
 
-			<br>
-
+			<!-- Quantidade -->
 			<div>
-				<label>Quantidade:</label> <br> <input type="number"
-					id="quantidadeProduto" min="1" value="1">
+				<label>Quantidade</label>
+
+				<input type="number"
+					id="quantidadeProduto"
+					min="1"
+					value="1">
 			</div>
 
-			<br>
+			<!-- Botão adicionar -->
+			<button type="button"
+				class="btn-adicionar"
+				onclick="adicionarAoCarrinho()">
 
-			<button type="button" onclick="adicionarAoCarrinho()">
-				Adicionar ao carrinho</button>
+				Adicionar ao carrinho
+
+			</button>
 
 		</section>
 
-		<hr>
+		<!-- Área direita -->
+		<section class="area-carrinho">
+		
+			<!-- Cabeçalho do carrinho -->
+<div class="cabecalho-carrinho">
 
-		<!-- Carrinho da venda -->
-		<section>
-			<h2>Carrinho</h2>
+	<h2>Itens da venda</h2>
 
-			<table border="1">
-				<thead>
-					<tr>
-						<th>Produto</th>
-						<th>Preço</th>
-						<th>Quantidade</th>
-						<th>Subtotal</th>
-					</tr>
-				</thead>
+	<div class="data-venda">
+		<span>Data</span>
+		<input type="date" id="dataVenda">
+	</div>
 
-				<tbody id="tabelaCarrinho">
-					<!-- Itens adicionados via JavaScript -->
-				</tbody>
-			</table>
+</div>
 
-			<h3>
-				Total: R$ <span id="valorTotal">0.00</span>
-			</h3>
+			<div class="tabela-scroll-vendas">
 
-			<button type="button" onclick="editarItemCarrinho()">Editar
-				item</button>
-			<button type="button" onclick="removerItemCarrinho()">Remover
-				item</button>
-			<button type="button" onclick="limparCarrinho()">Limpar
-				carrinho</button>
-			<button type="button" onclick="finalizarVenda()">Finalizar
-				venda</button>
+				<table>
+
+					<thead>
+						<tr>
+							<th>Produto</th>
+							<th>Quantidade</th>
+							<th>Preço Unt</th>
+							<th>Subtotal</th>
+						</tr>
+					</thead>
+
+					<tbody id="tabelaCarrinho">
+						<!-- Itens adicionados via JavaScript -->
+					</tbody>
+
+				</table>
+
+			</div>
+
+			<div class="area-total">
+				<span>Total :</span>
+				<strong>R$ <span id="valorTotal">0.00</span></strong>
+			</div>
+
+			<div class="botoes-carrinho">
+
+				<button type="button" onclick="finalizarVenda()">
+					Finalizar Venda
+				</button>
+
+				<button type="button" onclick="editarItemCarrinho()">
+					Editar Item
+				</button>
+
+				<button type="button" onclick="removerItemCarrinho()">
+					Remover Item
+				</button>
+
+				<button type="button" onclick="limparCarrinho()">
+					Limpar
+				</button>
+
+			</div>
+
 		</section>
 
+	</div>
 
-		<hr>
-
-
-	</main>
+</main>
 
 	<script>
 	/*
@@ -431,9 +470,34 @@
 	/*
 	 * Mostra a data atual na tela de vendas.
 	 */
-	document.getElementById("dataVenda").textContent =
-		new Date().toLocaleDateString("pt-BR");
-	
+	 document.getElementById("dataVenda").value =
+			new Date().toISOString().split("T")[0];
+	// Checkbox venda sem cliente
+	 const checkboxSemCliente = document
+	 	.getElementById("vendaSemCliente");
+
+	 // Campo cliente
+	 const campoCliente = document
+	 	.getElementById("clienteSelecionado");
+
+	 // Quando marcar/desmarcar o checkbox
+	 checkboxSemCliente.addEventListener("change", function() {
+
+	 	// Se estiver marcado
+	 	if (this.checked) {
+
+	 		// Remove obrigatoriedade
+	 		campoCliente.removeAttribute("required");
+
+	 		// Limpa campo
+	 		campoCliente.value = "";
+
+	 	} else {
+
+	 		// Campo volta a ser obrigatório
+	 		campoCliente.setAttribute("required", "required");
+	 	}
+	 });
 	
 </script>
 </body>

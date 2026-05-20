@@ -33,6 +33,7 @@ public class ClienteController {
 	public String listarClientes(Model model) {
 
 		model.addAttribute("clientes", clienteService.listarTodos());
+		
 
 		return "clientes";
 	}
@@ -102,4 +103,6 @@ public class ClienteController {
 
 	    return "redirect:/clientes";
 	}
+	
+	
 	}

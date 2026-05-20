@@ -5,65 +5,13 @@ body {
     background-color: #f7f2ef;
 }
 
-/* Cabeçalho completo */
-.topo {
-    width: 100%;
-    background-color: #7b6048;
-}
-
-/* Parte superior do cabeçalho */
-.topo-logo {
-    height: 80px;
-    display: flex;
-    align-items: center;
-    padding-left: 50px;
-    background-color: #7b6048;
-}
-
-/* Área da logo */
-.logo-area {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-/* Ícone provisório do cachorro */
-.logo-icone {
-    font-size: 48px;
-}
-
-/* Texto PETSTOCK */
-.logo-texto {
-    color: #fff7ed;
-    font-size: 32px;
-    font-weight: bold;
-}
-
-/* Menu principal */
-.menu {
-    height: 56px;
-    background-color: #fbf8f6;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 46px;
-    border-bottom: 10px solid #7b6048;
-}
-
-/* Links do menu */
-.menu a {
-    color: #cba27c;
-    text-decoration: none;
-    font-size: 20px;
-    font-weight: bold;
-}
-
-/* Efeito ao passar o mouse */
-.menu a:hover {
-    color: #7b6048;
-}
-
-/* Área principal das páginas */
+/* Área principal centralizada das páginas */
 .conteudo {
+    width: 90%;
+    max-width: 1400px;
+    margin: 30px auto;
+    background-color: #fdfaf8;
+    border-radius: 18px;
     padding: 30px;
+    box-sizing: border-box;
 }

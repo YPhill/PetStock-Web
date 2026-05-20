@@ -24,15 +24,28 @@
         <!-- Menu principal do sistema -->
         <nav class="menu">
 
-            <a href="/">Início</a>
-            <a href="/clientes">Cliente</a>
-            <a href="/fornecedores">Fornecedor</a>
-            <a href="/produtos">Produtos</a>
-            <a href="/estoque">Estoque</a>
-            <a href="/vendas">Vendas</a>
-            <a href="/relatorios">Relatórios</a>
+    <a href="/"
+       th:classappend="${paginaAtual == 'inicio'} ? 'ativo' : ''">Início</a>
 
-        </nav>
+    <a href="/clientes"
+       th:classappend="${paginaAtual == 'clientes'} ? 'ativo' : ''">Cliente</a>
+
+    <a href="/fornecedores"
+       th:classappend="${paginaAtual == 'fornecedores'} ? 'ativo' : ''">Fornecedor</a>
+
+    <a href="/produtos"
+       th:classappend="${paginaAtual == 'produtos'} ? 'ativo' : ''">Produtos</a>
+
+    <a href="/estoque"
+       th:classappend="${paginaAtual == 'estoque'} ? 'ativo' : ''">Estoque</a>
+
+    <a href="/vendas"
+       th:classappend="${paginaAtual == 'vendas'} ? 'ativo' : ''">Vendas</a>
+
+    <a href="/relatorios"
+       th:classappend="${paginaAtual == 'relatorios'} ? 'ativo' : ''">Relatórios</a>
+
+</nav>
 
     </header>
 

@@ -7,6 +7,8 @@
 
 <!-- CSS global -->
 <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/header.css">
+<link rel="stylesheet" href="/css/formularios.css">
 </head>
 
 <body>
@@ -23,92 +25,176 @@
 			method="post">
 
 			<!-- IDs escondidos usados na edição -->
-			<input type="hidden" th:field="*{idFornecedor}"> <input
-				type="hidden" th:field="*{endereco.idEndereco}"> <input
-				type="hidden" th:field="*{contato.idContato}">
+			<input type="hidden" th:field="*{idFornecedor}">
+			<input type="hidden" th:field="*{endereco.idEndereco}">
+			<input type="hidden" th:field="*{contato.idContato}">
 
-			<!-- Nome fantasia -->
-			<div>
-				<label>Nome Fantasia:</label> <br> <input type="text"
-					th:field="*{nomeFantasia}" required>
+			<!-- Divisão do formulário em duas colunas -->
+			<div class="grid-formulario">
+
+				<!-- Nome fantasia -->
+				<div>
+					<label>Nome Fantasia:</label>
+
+					<input type="text"
+						th:field="*{nomeFantasia}"
+						placeholder="Digite o nome fantasia"
+						required>
+				</div>
+
+				<!-- CNPJ -->
+				<div>
+					<label>CNPJ:</label>
+
+					<input type="text"
+						th:field="*{cnpj}"
+						placeholder="Deve conter 14 números"
+						required
+						minlength="14"
+						maxlength="14"
+						pattern="[0-9]{14}"
+						title="O CNPJ deve conter exatamente 14 números">
+				</div>
+
+				<!-- Contrato social -->
+				<div>
+					<label>Contrato Social:</label>
+
+					<input type="text"
+						th:field="*{contratoSocial}"
+						placeholder="Digite o contrato social"
+						required>
+				</div>
+
+				<!-- Rua -->
+				<div>
+					<label>Rua:</label>
+
+					<input type="text"
+						th:field="*{endereco.rua}"
+						placeholder="Digite a rua"
+						required>
+				</div>
+
+				<!-- Cidade -->
+				<div>
+					<label>Cidade:</label>
+
+					<input type="text"
+						th:field="*{endereco.cidade}"
+						placeholder="Digite a cidade"
+						required>
+				</div>
+
+				<!-- Estado -->
+				<div>
+					<label>Estado:</label>
+
+					<select th:field="*{endereco.estado}" required>
+
+						<option value="">Selecione um estado</option>
+
+						<option value="AC">Acre</option>
+						<option value="AL">Alagoas</option>
+						<option value="AP">Amapá</option>
+						<option value="AM">Amazonas</option>
+						<option value="BA">Bahia</option>
+						<option value="CE">Ceará</option>
+						<option value="DF">Distrito Federal</option>
+						<option value="ES">Espírito Santo</option>
+						<option value="GO">Goiás</option>
+						<option value="MA">Maranhão</option>
+						<option value="MT">Mato Grosso</option>
+						<option value="MS">Mato Grosso do Sul</option>
+						<option value="MG">Minas Gerais</option>
+						<option value="PA">Pará</option>
+						<option value="PB">Paraíba</option>
+						<option value="PR">Paraná</option>
+						<option value="PE">Pernambuco</option>
+						<option value="PI">Piauí</option>
+						<option value="RJ">Rio de Janeiro</option>
+						<option value="RN">Rio Grande do Norte</option>
+						<option value="RS">Rio Grande do Sul</option>
+						<option value="RO">Rondônia</option>
+						<option value="RR">Roraima</option>
+						<option value="SC">Santa Catarina</option>
+						<option value="SP">São Paulo</option>
+						<option value="SE">Sergipe</option>
+						<option value="TO">Tocantins</option>
+
+					</select>
+				</div>
+
+				<!-- CEP -->
+				<div>
+					<label>CEP:</label>
+
+					<input type="text"
+						th:field="*{endereco.cep}"
+						placeholder="Deve conter 8 números"
+						required
+						minlength="8"
+						maxlength="8"
+						pattern="[0-9]{8}"
+						title="O CEP deve conter exatamente 8 números">
+				</div>
+
+				<!-- Telefone -->
+				<div>
+					<label>Telefone:</label>
+
+					<input type="text"
+						th:field="*{contato.telefone}"
+						placeholder="Deve conter 10 ou 11 números"
+						required
+						minlength="10"
+						maxlength="11"
+						pattern="[0-9]{10,11}"
+						title="O telefone deve conter entre 10 e 11 números">
+				</div>
+
+				<!-- Celular -->
+				<div>
+					<label>Celular:</label>
+
+					<input type="text"
+						th:field="*{contato.celular}"
+						placeholder="Deve conter 10 ou 11 números"
+						required
+						minlength="10"
+						maxlength="11"
+						pattern="[0-9]{10,11}"
+						title="O celular deve conter entre 10 e 11 números">
+				</div>
+
+				<!-- Email -->
+				<div>
+					<label>Email:</label>
+
+					<input type="email"
+						th:field="*{contato.email}"
+						placeholder="Digite o email"
+						required>
+				</div>
+
 			</div>
 
-			<br>
+			<!-- Botões -->
+			<div class="grupo-botoes">
 
-			<!-- CNPJ -->
-			<div>
-				<label>CNPJ:</label> <br> <input type="text" th:field="*{cnpj}"
-					required>
+				<button type="button"
+					class="btn-voltar"
+					onclick="window.location.href='/fornecedores'">
+
+					Voltar
+
+				</button>
+
+				<button type="submit">
+					Salvar Fornecedor
+				</button>
+
 			</div>
-
-			<br>
-
-			<!-- Contrato social -->
-			<div>
-				<label>Contrato Social:</label> <br> <input type="text"
-					th:field="*{contratoSocial}" required>
-			</div>
-
-			<br>
-
-			<!-- Rua -->
-			<div>
-				<label>Rua:</label> <br> <input type="text"
-					th:field="*{endereco.rua}" required>
-			</div>
-
-			<br>
-
-			<!-- Cidade -->
-			<div>
-				<label>Cidade:</label> <br> <input type="text"
-					th:field="*{endereco.cidade}" required>
-			</div>
-
-			<br>
-
-			<!-- Estado -->
-			<div>
-				<label>Estado:</label> <br> <input type="text"
-					th:field="*{endereco.estado}" required>
-			</div>
-
-			<br>
-
-			<!-- CEP -->
-			<div>
-				<label>CEP:</label> <br> <input type="text"
-					th:field="*{endereco.cep}" required>
-			</div>
-
-			<br>
-
-			<!-- Telefone -->
-			<div>
-				<label>Telefone:</label> <br> <input type="text"
-					th:field="*{contato.telefone}">
-			</div>
-
-			<br>
-
-			<!-- Celular -->
-			<div>
-				<label>Celular:</label> <br> <input type="text"
-					th:field="*{contato.celular}">
-			</div>
-
-			<br>
-
-			<!-- Email -->
-			<div>
-				<label>Email:</label> <br> <input type="email"
-					th:field="*{contato.email}">
-			</div>
-
-			<br>
-
-			<!-- Botão -->
-			<button type="submit">Salvar Fornecedor</button>
 
 		</form>
 

@@ -1,0 +1,65 @@
+/* Cabeçalho completo */
+.topo {
+    width: 100%;
+    background-color: #7b6048;
+}
+
+/* Parte superior do cabeçalho */
+.topo-logo {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    padding-left: 50px;
+    background-color: #7b6048;
+}
+
+/* Área da logo */
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Ícone provisório do cachorro */
+.logo-icone {
+    font-size: 48px;
+}
+
+/* Texto PETSTOCK */
+.logo-texto {
+    color: #fff7ed;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+/* Menu principal */
+.menu {
+    height: 56px;
+    background-color: #fbf8f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 46px;
+    border-bottom: 10px solid #7b6048;
+}
+
+/* Links do menu */
+.menu a {
+    color: #cba27c;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Efeito ao passar o mouse */
+.menu a:hover {
+    color: #7b6048;
+}
+
+/* Página ativa do menu */
+.menu a.ativo {
+    color: #7b4d28;
+    font-weight: bold;
+    border-bottom: 3px solid #7b4d28;
+    padding-bottom: 5px;
+}

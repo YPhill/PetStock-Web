@@ -7,6 +7,8 @@
 
 <!-- CSS global -->
 <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/header.css">
+<link rel="stylesheet" href="/css/formularios.css">
 </head>
 
 <body>
@@ -36,64 +38,136 @@
 			<!-- Guarda a tela de origem do cadastro -->
 			<input type="hidden" name="origem" th:value="${origem}">
 
+			
+			
+			<!-- Divisão do forms em dois -->
+			<div class="grid-formulario">
+			
+			
 			<!-- Nome -->
-			<div>
-				<label>Nome:</label> <br> <input type="text" th:field="*{nome}"
-					required>
-			</div>
+			<!-- Nome -->
+<div>
+	<label>Nome:</label>
 
-			<br>
+	<input type="text"
+		th:field="*{nome}"
+		placeholder="Digite o nome do cliente"
+		required>
+</div>
+
+			
 
 			<!-- Rua -->
-			<div>
-				<label>Rua:</label> <br> <input type="text"
-					th:field="*{endereco.rua}" required>
-			</div>
+			<!-- Rua -->
+<div>
+	<label>Rua:</label>
 
-			<br>
+	<input type="text"
+		th:field="*{endereco.rua}"
+		placeholder="Digite a rua"
+		required>
+</div>
+
+		
 
 			<!-- Cidade -->
-			<div>
-				<label>Cidade:</label> <br> <input type="text"
-					th:field="*{endereco.cidade}" required>
-			</div>
+			<!-- Cidade -->
+<div>
+	<label>Cidade:</label>
 
-			<br>
+	<input type="text"
+		th:field="*{endereco.cidade}"
+		placeholder="Digite a cidade"
+		required>
+</div>
+
+			
 
 			<!-- Estado -->
 			<div>
-				<label>Estado:</label> <br> <input type="text"
-					th:field="*{endereco.estado}" required>
-			</div>
+	<label>Estado:</label> <br>
 
-			<br>
+	<select th:field="*{endereco.estado}" required>
+
+		<option value="">Selecione um estado</option>
+
+		<option value="AC">Acre</option>
+		<option value="AL">Alagoas</option>
+		<option value="AP">Amapá</option>
+		<option value="AM">Amazonas</option>
+		<option value="BA">Bahia</option>
+		<option value="CE">Ceará</option>
+		<option value="DF">Distrito Federal</option>
+		<option value="ES">Espírito Santo</option>
+		<option value="GO">Goiás</option>
+		<option value="MA">Maranhão</option>
+		<option value="MT">Mato Grosso</option>
+		<option value="MS">Mato Grosso do Sul</option>
+		<option value="MG">Minas Gerais</option>
+		<option value="PA">Pará</option>
+		<option value="PB">Paraíba</option>
+		<option value="PR">Paraná</option>
+		<option value="PE">Pernambuco</option>
+		<option value="PI">Piauí</option>
+		<option value="RJ">Rio de Janeiro</option>
+		<option value="RN">Rio Grande do Norte</option>
+		<option value="RS">Rio Grande do Sul</option>
+		<option value="RO">Rondônia</option>
+		<option value="RR">Roraima</option>
+		<option value="SC">Santa Catarina</option>
+		<option value="SP">São Paulo</option>
+		<option value="SE">Sergipe</option>
+		<option value="TO">Tocantins</option>
+
+	</select>
+</div>
+
+			
 
 			<!-- CEP -->
 			<div>
-				<label>CEP:</label> <br> <input type="text"
-					th:field="*{endereco.cep}" required>
-			</div>
+	<label>CEP:</label>
+	<input type="text"
+		th:field="*{endereco.cep}"
+		placeholder="Deve conter 8 números"
+		required
+		minlength="8"
+		maxlength="8"
+		pattern="[0-9]{8}"
+		title="O CEP deve conter exatamente 8 números">
+</div>
 
-			<br>
+			
 
 			<!-- Celular -->
 			<div>
-				<label>Celular:</label> <br> <input type="text"
-					th:field="*{contato.celular}">
-			</div>
+	<label>Celular:</label>
+	<input type="text"
+		th:field="*{contato.celular}"
+		placeholder="Deve conter entre 10 e 11 números"
+		required
+		minlength="10"
+		maxlength="11"
+		pattern="[0-9]{10,11}"
+		title="O celular deve conter entre 10 e 11 números">
+</div>
 
-			<br>
+			
 
 			<!-- Email -->
 			<div>
 				<label>Email:</label> <br> <input type="email"
-					th:field="*{contato.email}">
+					th:field="*{contato.email}" placeholder="Deve conter @">
+			</div>
 			</div>
 
-			<br>
+			
 
-			<!-- Botão -->
-			<button type="submit">Salvar Cliente</button>
+			<!-- Botões  exibidos quando vem da tela de cadastro -->
+			<div class="grupo-botoes">
+				<button type="button" class="btn-voltar" onclick="window.location.href='/clientes'">Voltar</button>
+				<button type="submit">Salvar Cliente</button>	
+			</div>
 
 			<!-- Botão exibido apenas quando o cadastro veio da tela de vendas -->
 			<a th:if="${origem == 'vendas'}" href="/vendas">

@@ -2,23 +2,74 @@
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <title>PetStock</title>
+<meta charset="UTF-8">
+<title>PetStock</title>
 
-    <!-- Importa o CSS principal do sistema -->
-    <link rel="stylesheet" href="/css/style.css">
+<!-- CSS global -->
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/header.css">
+<link rel="stylesheet" href="/css/index.css">
 </head>
 
 <body>
 
-    <!-- Insere o cabeçalho padrão -->
-    <div th:replace="fragments/header :: header"></div>
+	<!-- Cabeçalho padrão -->
+	<div th:replace="~{fragments/header :: header}"></div>
 
-    <!-- Conteúdo principal da página -->
-    <main class="conteudo">
-        <h1>PetStock Web funcionando!</h1>
-        <p>Sistema iniciado com sucesso.</p>
-    </main>
+	<main class="conteudo">
+
+		<section class="inicio-apresentacao">
+
+			<h1>Bem-vindo ao PetStock</h1>
+
+			<p>
+				Gerencie clientes, fornecedores, produtos, estoque e vendas
+				de forma simples e organizada.
+			</p>
+
+		</section>
+
+		<section class="cards-inicio">
+
+			<a href="/clientes" class="card-inicio">
+				
+				<h2>Clientes</h2>
+				<p>Consulte e cadastre clientes.</p>
+			</a>
+
+			<a href="/fornecedores" class="card-inicio">
+				
+				<h2>Fornecedores</h2>
+				<p>Organize os fornecedores.</p>
+			</a>
+
+			<a href="/produtos" class="card-inicio">
+				
+				<h2>Produtos</h2>
+				<p>Gerencie produtos cadastrados.</p>
+			</a>
+
+			<a href="/estoque" class="card-inicio">
+				
+				<h2>Estoque</h2>
+				<p>Acompanhe entradas e saídas.</p>
+			</a>
+
+			<a href="/vendas" class="card-inicio">
+				
+				<h2>Vendas</h2>
+				<p>Registre novas vendas.</p>
+			</a>
+
+			<a href="/relatorios" class="card-inicio">
+				
+				<h2>Relatórios</h2>
+				<p>Visualize vendas realizadas.</p>
+			</a>
+
+		</section>
+
+	</main>
 
 </body>
 

@@ -30,6 +30,7 @@ public class EstoqueController {
 
 		// Envia todos os registros de estoque para o HTML
 		model.addAttribute("estoques", estoqueService.listarTodos());
+		
 
 		// Abre templates/estoque.html
 		return "estoque";
