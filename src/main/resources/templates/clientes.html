@@ -30,76 +30,74 @@
 
 					<!-- Barra de pesquisa -->
 					<div class="barra-pesquisa">
-						<span class="icone-lupa">🔍</span>
-
-						<input type="text" id="campoPesquisa" placeholder="Buscar...">
+						<span class="icone-lupa">🔍</span> <input type="text"
+							id="campoPesquisa" placeholder="Buscar...">
 					</div>
 
 					<!-- Área com rolagem horizontal -->
 					<!-- Área com rolagem horizontal e vertical -->
-<div class="tabela-scroll">
+					<div class="tabela-scroll">
 
-	<table>
+						<table>
 
-		<thead>
-			<tr>
-				<th class="coluna-selecao" style="display: none;">Selecionar</th>
-				<th>ID</th>
-				<th>Nome</th>
-				<th>Rua</th>
-				<th>Cidade</th>
-				<th>Estado</th>
-				<th>CEP</th>
-				<th>Celular</th>
-				<th>E-mail</th>
-			</tr>
-		</thead>
+							<thead>
+								<tr>
+									<th class="coluna-selecao" style="display: none;">Selecionar</th>
+									<th>ID</th>
+									<th>Nome</th>
+									<th>Rua</th>
+									<th>Cidade</th>
+									<th>Estado</th>
+									<th>CEP</th>
+									<th>Celular</th>
+									<th>E-mail</th>
+								</tr>
+							</thead>
 
-		<tbody>
+							<tbody>
 
-			<tr th:each="cliente : ${clientes}" class="linha-cliente">
+								<tr th:each="cliente : ${clientes}" class="linha-cliente">
 
-				<!-- Checkbox escondido até ativar editar/excluir -->
-				<td class="coluna-selecao" style="display: none;">
-					<input type="checkbox" name="idsSelecionados"
-						th:value="${cliente.idCliente}">
-				</td>
+									<!-- Checkbox escondido até ativar editar/excluir -->
+									<td class="coluna-selecao" style="display: none;"><input
+										type="checkbox" name="idsSelecionados"
+										th:value="${cliente.idCliente}"></td>
 
-				<td th:text="${cliente.idCliente}"></td>
+									<td th:text="${cliente.idCliente}"></td>
 
-				<td class="nome-cliente" th:text="${cliente.nome}"></td>
+									<td class="nome-cliente" th:text="${cliente.nome}"></td>
 
-				<td
-					th:text="${cliente.endereco != null ? cliente.endereco.rua : '-'}">
-				</td>
+									<td
+										th:text="${cliente.endereco != null ? cliente.endereco.rua : '-'}">
+									</td>
 
-				<td
-					th:text="${cliente.endereco != null ? cliente.endereco.cidade : '-'}">
-				</td>
+									<td
+										th:text="${cliente.endereco != null ? cliente.endereco.cidade : '-'}">
+									</td>
 
-				<td
-					th:text="${cliente.endereco != null ? cliente.endereco.estado : '-'}">
-				</td>
+									<td
+										th:text="${cliente.endereco != null ? cliente.endereco.estado : '-'}">
+									</td>
 
-				<td
-					th:text="${cliente.endereco != null ? cliente.endereco.cep : '-'}">
-				</td>
+									<td
+										th:text="${cliente.endereco != null ? cliente.endereco.cep : '-'}">
+									</td>
 
-				<td
-					th:text="${cliente.contato != null ? cliente.contato.celular : '-'}">
-				</td>
+									<td
+										th:text="${cliente.contato != null ? cliente.contato.celular : '-'}">
+									</td>
 
-				<td
-					th:text="${cliente.contato != null ? cliente.contato.email : '-'}">
-				</td>
+									<td
+										th:text="${cliente.contato != null ? cliente.contato.email : '-'}">
+									</td>
 
-			</tr>
+								</tr>
 
-		</tbody>
+							</tbody>
 
-	</table>
+						</table>
 
-</div>
+					</div>
 
 				</form>
 
@@ -109,18 +107,21 @@
 			<div class="area-botoes">
 
 				<a href="/clientes/novo">
-<button type="button" id="btnCadastrar"> <img src="/img/icone-cadastrar.png" class="icone-botao"> <span>Cadastrar </span> </button>
-</a>
+					<button type="button" id="btnCadastrar">
+						<img src="/img/icone-cadastrar.png" class="icone-botao"> <span>Cadastrar
+						</span>
+					</button>
+				</a>
 
 				<button type="button" id="btnEditar" onclick="ativarModoEditar()">
-	<img src="/img/icone-editar.png" class="icone-botao">
-	<span> Editar </span>
-</button>
+					<img src="/img/icone-editar.png" class="icone-botao"> <span>
+						Editar </span>
+				</button>
 
 				<button type="button" id="btnExcluir" onclick="ativarModoExcluir()">
-	<img src="/img/icone-excluir.png" class="icone-botao">
-	<span> Excluir </span>
-</button>
+					<img src="/img/icone-excluir.png" class="icone-botao"> <span>
+						Excluir </span>
+				</button>
 				<button type="button" id="btnConfirmar" onclick="confirmarAcao()"
 					style="display: none;">Confirmar</button>
 
@@ -137,12 +138,20 @@
 		let modoAtual = "";
 
 		function mostrarSelecao() {
-			document.querySelectorAll(".coluna-selecao").forEach(function(coluna) {
-				coluna.style.display = "table-cell";
-			});
 
-			document.getElementById("btnConfirmar").style.display = "inline-block";
-			document.getElementById("btnCancelar").style.display = "inline-block";
+			document.querySelectorAll(".coluna-selecao").forEach(
+					function(coluna) {
+						coluna.style.display = "table-cell";
+					});
+
+			/* Esconde os botões principais */
+			document.getElementById("btnCadastrar").style.display = "none";
+			document.getElementById("btnEditar").style.display = "none";
+			document.getElementById("btnExcluir").style.display = "none";
+
+			/* Mostra confirmar e cancelar */
+			document.getElementById("btnConfirmar").style.display = "";
+			document.getElementById("btnCancelar").style.display = "";
 		}
 
 		function ativarModoEditar() {
@@ -158,20 +167,28 @@
 		function cancelarSelecao() {
 			modoAtual = "";
 
-			document.querySelectorAll("input[name='idsSelecionados']").forEach(function(checkbox) {
-				checkbox.checked = false;
-			});
+			document.querySelectorAll("input[name='idsSelecionados']").forEach(
+					function(checkbox) {
+						checkbox.checked = false;
+					});
 
-			document.querySelectorAll(".coluna-selecao").forEach(function(coluna) {
-				coluna.style.display = "none";
-			});
+			document.querySelectorAll(".coluna-selecao").forEach(
+					function(coluna) {
+						coluna.style.display = "none";
+					});
 
 			document.getElementById("btnConfirmar").style.display = "none";
 			document.getElementById("btnCancelar").style.display = "none";
+
+			/* Mostra novamente os botões principais */
+			document.getElementById("btnCadastrar").style.display = "";
+			document.getElementById("btnEditar").style.display = "";
+			document.getElementById("btnExcluir").style.display = "";
 		}
 
 		function confirmarAcao() {
-			const selecionados = document.querySelectorAll("input[name='idsSelecionados']:checked");
+			const selecionados = document
+					.querySelectorAll("input[name='idsSelecionados']:checked");
 
 			if (selecionados.length === 0) {
 				alert("Selecione pelo menos um cliente.");
@@ -202,20 +219,24 @@
 			}
 		}
 
-		document.getElementById("campoPesquisa").addEventListener("input", function() {
-			const textoBusca = this.value.toLowerCase();
-			const linhas = document.querySelectorAll(".linha-cliente");
+		document.getElementById("campoPesquisa").addEventListener(
+				"input",
+				function() {
+					const textoBusca = this.value.toLowerCase();
+					const linhas = document.querySelectorAll(".linha-cliente");
 
-			linhas.forEach(function(linha) {
-				const nomeCliente = linha.querySelector(".nome-cliente").textContent.toLowerCase();
+					linhas.forEach(function(linha) {
+						const nomeCliente = linha
+								.querySelector(".nome-cliente").textContent
+								.toLowerCase();
 
-				if (nomeCliente.includes(textoBusca)) {
-					linha.style.display = "";
-				} else {
-					linha.style.display = "none";
-				}
-			});
-		});
+						if (nomeCliente.includes(textoBusca)) {
+							linha.style.display = "";
+						} else {
+							linha.style.display = "none";
+						}
+					});
+				});
 	</script>
 
 </body>

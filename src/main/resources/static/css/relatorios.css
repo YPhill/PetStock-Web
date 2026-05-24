@@ -133,3 +133,56 @@
 .btn-excluir-venda:hover {
 	background-color: #8d6037;
 }
+
+.area-acoes-venda {
+	margin-top: 18px;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 12px;
+}
+
+.texto-instrucao-venda {
+	color: #7b6048;
+	font-size: 15px;
+	font-weight: bold;
+	margin: 0;
+}
+
+.btn-acao-venda {
+	width: 170px;
+	height: 44px;
+	border: none;
+	border-radius: 10px;
+	background-color: #a77445;
+	color: white;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.btn-acao-venda:hover {
+	background-color: #8d6037;
+}
+
+
+.cabecalho-vendas-relatorio {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 18px;
+	margin-bottom: 18px;
+}
+
+.cabecalho-vendas-relatorio h2 {
+	margin-bottom: 0;
+}
+
+.resumo-filtro {
+	background-color: #f3efec;
+	color: #7b6048;
+	border-radius: 10px;
+	padding: 10px 16px;
+	font-size: 14px;
+	font-weight: bold;
+	white-space: nowrap;
+}

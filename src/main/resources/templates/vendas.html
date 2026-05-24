@@ -18,152 +18,149 @@
 	<!-- Conteúdo principal da página -->
 	<main class="conteudo">
 
-	<div class="layout-vendas">
+		<div class="layout-vendas">
 
-		<!-- Área esquerda -->
-		<section class="area-form-venda">
+			<!-- Área esquerda -->
+			<section class="area-form-venda">
 
-			<!-- Venda sem cliente -->
-			<div class="campo-checkbox">
-				<input type="checkbox" id="vendaSemCliente">
-				<label>Venda sem cliente</label>
+				<!-- Venda sem cliente -->
+				<div class="campo-checkbox">
+					<input type="checkbox" id="vendaSemCliente"> <label>Venda
+						sem cliente</label>
+				</div>
+
+				<!-- Cliente -->
+				<div>
+					<label>Cliente</label> <input list="listaClientes"
+						id="clienteSelecionado" placeholder="Digite o nome do cliente">
+
+					<datalist id="listaClientes">
+						<option th:each="cliente : ${clientes}" th:value="${cliente.nome}"
+							th:data-id="${cliente.idCliente}"></option>
+					</datalist>
+				</div>
+
+
+
+				<!-- Produto -->
+				<div>
+					<label>Produto</label> <input list="listaProdutos"
+						id="produtoSelecionado" placeholder="Digite o nome do produto"
+						onchange="preencherProduto()">
+
+					<datalist id="listaProdutos">
+						<option th:each="produto : ${produtos}"
+							th:value="${produto.nome + ' (' + (produto.estoque != null ? produto.estoque.quantidadeAtual : 0) + ')'}"
+							th:data-nome-real="${produto.nome}"
+							th:data-id="${produto.idProduto}"
+							th:data-preco="${produto.preco}"
+							th:data-estoque="${produto.estoque != null ? produto.estoque.quantidadeAtual : 0}"
+							th:data-estoque-original="${produto.estoque != null ? produto.estoque.quantidadeAtual : 0}">
+						</option>
+					</datalist>
+				</div>
+
+				<!-- Preço -->
+				<div>
+					<label>Preço</label> <input type="text" id="precoProduto" readonly>
+				</div>
+
+				<!-- Quantidade -->
+				<div>
+					<label>Quantidade</label> <input type="number"
+						id="quantidadeProduto" min="1" value="1">
+				</div>
+
+				<!-- Botão adicionar -->
+				<button type="button" class="btn-adicionar"
+					onclick="adicionarAoCarrinho()">Adicionar ao carrinho</button>
+
+				<button type="button" id="btnVoltarRelatorios"
+					class="btn-voltar-relatorios"
+					onclick="window.location.href='/relatorios'" style="display: none;">Voltar
+					para Relatórios</button>
+
+
+
+			</section>
+
+			<!-- Área direita -->
+			<section class="area-carrinho">
+
+				<!-- Cabeçalho do carrinho -->
+				<div class="cabecalho-carrinho">
+
+					<h2>Itens da venda</h2>
+
+					<div class="data-venda">
+						<span>Data</span> <input type="date" id="dataVenda">
+					</div>
+
+				</div>
+
+				<div class="tabela-scroll-vendas">
+
+					<table>
+
+						<thead>
+							<tr>
+								<th>Produto</th>
+								<th>Quantidade</th>
+								<th>Preço Unt</th>
+								<th>Subtotal</th>
+							</tr>
+						</thead>
+
+						<tbody id="tabelaCarrinho">
+							<!-- Itens adicionados via JavaScript -->
+						</tbody>
+
+					</table>
+
+				</div>
+
+				<div class="area-total">
+					<span>Total :</span> <strong>R$ <span id="valorTotal">0.00</span></strong>
+				</div>
+
+				<div class="botoes-carrinho">
+
+					<button type="button" onclick="finalizarVenda()"
+						id="btnFinalizarVenda">Finalizar Venda</button>
+
+					<button type="button" onclick="editarItemCarrinho()">
+						Editar Item</button>
+
+					<button type="button" onclick="removerItemCarrinho()">
+						Remover Item</button>
+
+					<button type="button" onclick="limparCarrinho()">Limpar</button>
+
+
+
+				</div>
+
+			</section>
+
+		</div>
+
+		<!-- Dados escondidos dos itens da venda em edição -->
+		<div id="dadosItensEdicao" style="display: none;"
+			th:if="${modoEdicao}">
+
+			<div th:each="item : ${vendaEdicao.itens}" class="item-edicao"
+				th:data-id-produto="${item.produto.idProduto}"
+				th:data-nome-produto="${item.produto.nome}"
+				th:data-preco="${item.precoUnitario}"
+				th:data-quantidade="${item.quantidade}"
+				th:data-estoque="${item.produto.estoque.quantidadeAtual + item.quantidade}">
 			</div>
 
-			<!-- Cliente -->
-			<div>
-				<label>Cliente</label>
+		</div>
 
-				<input list="listaClientes"
-					id="clienteSelecionado"
-					placeholder="Digite o nome do cliente">
+	</main>
 
-				<datalist id="listaClientes">
-					<option th:each="cliente : ${clientes}"
-						th:value="${cliente.nome}"
-						th:data-id="${cliente.idCliente}">
-					</option>
-				</datalist>
-			</div>
-
-		
-
-			<!-- Produto -->
-			<div>
-				<label>Produto</label>
-
-				<input list="listaProdutos"
-					id="produtoSelecionado"
-					placeholder="Digite o nome do produto"
-					onchange="preencherProduto()">
-
-				<datalist id="listaProdutos">
-					<option th:each="produto : ${produtos}"
-						th:value="${produto.nome + ' (' + (produto.estoque != null ? produto.estoque.quantidadeAtual : 0) + ')'}"
-						th:data-nome-real="${produto.nome}"
-						th:data-id="${produto.idProduto}"
-						th:data-preco="${produto.preco}"
-						th:data-estoque="${produto.estoque != null ? produto.estoque.quantidadeAtual : 0}"
-						th:data-estoque-original="${produto.estoque != null ? produto.estoque.quantidadeAtual : 0}">
-					</option>
-				</datalist>
-			</div>
-
-			<!-- Preço -->
-			<div>
-				<label>Preço</label>
-
-				<input type="text" id="precoProduto" readonly>
-			</div>
-
-			<!-- Quantidade -->
-			<div>
-				<label>Quantidade</label>
-
-				<input type="number"
-					id="quantidadeProduto"
-					min="1"
-					value="1">
-			</div>
-
-			<!-- Botão adicionar -->
-			<button type="button"
-				class="btn-adicionar"
-				onclick="adicionarAoCarrinho()">
-
-				Adicionar ao carrinho
-
-			</button>
-
-		</section>
-
-		<!-- Área direita -->
-		<section class="area-carrinho">
-		
-			<!-- Cabeçalho do carrinho -->
-<div class="cabecalho-carrinho">
-
-	<h2>Itens da venda</h2>
-
-	<div class="data-venda">
-		<span>Data</span>
-		<input type="date" id="dataVenda">
-	</div>
-
-</div>
-
-			<div class="tabela-scroll-vendas">
-
-				<table>
-
-					<thead>
-						<tr>
-							<th>Produto</th>
-							<th>Quantidade</th>
-							<th>Preço Unt</th>
-							<th>Subtotal</th>
-						</tr>
-					</thead>
-
-					<tbody id="tabelaCarrinho">
-						<!-- Itens adicionados via JavaScript -->
-					</tbody>
-
-				</table>
-
-			</div>
-
-			<div class="area-total">
-				<span>Total :</span>
-				<strong>R$ <span id="valorTotal">0.00</span></strong>
-			</div>
-
-			<div class="botoes-carrinho">
-
-				<button type="button" onclick="finalizarVenda()">
-					Finalizar Venda
-				</button>
-
-				<button type="button" onclick="editarItemCarrinho()">
-					Editar Item
-				</button>
-
-				<button type="button" onclick="removerItemCarrinho()">
-					Remover Item
-				</button>
-
-				<button type="button" onclick="limparCarrinho()">
-					Limpar
-				</button>
-
-			</div>
-
-		</section>
-
-	</div>
-
-</main>
-
-	<script>
+	<script th:inline="javascript">
 	/*
 	 * Lista temporária dos itens da venda.
 	 * A venda só será salva no banco ao clicar em Finalizar venda.
@@ -174,6 +171,11 @@
 	 * Guarda o produto selecionado atualmente.
 	 */
 	let produtoAtual = null;
+	let modoEdicao = /*[[${modoEdicao != null ? modoEdicao : false}]]*/ false;
+	let idVendaEdicao = /*[[${vendaEdicao != null ? vendaEdicao.idVenda : 0}]]*/ 0;
+	
+	let clienteEdicao = /*[[${vendaEdicao != null && vendaEdicao.cliente != null ? vendaEdicao.cliente.nome : ''}]]*/ "";
+
 	
 	
 	/*
@@ -310,10 +312,14 @@
 		document.getElementById("valorTotal").textContent = total.toFixed(2);
 	}
 
-	function limparCarrinho() {
-		carrinho = [];
-		atualizarCarrinho();
-	}
+	 function limparCarrinho() {
+
+			carrinho = [];
+
+			atualizarCarrinho();
+
+			atualizarListaProdutos();
+		}
 
 	function removerItemCarrinho() {
 		const selecionado = document.querySelector("input[name='itemCarrinho']:checked");
@@ -430,7 +436,11 @@
 		};
 
 		// Envia a venda para o backend
-		fetch("/vendas/finalizar", {
+		const urlVenda = modoEdicao
+	? "/vendas/atualizar?id=" + idVendaEdicao
+	: "/vendas/finalizar";
+
+fetch(urlVenda, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json"
@@ -447,6 +457,8 @@
 			});
 		})
 		.then(function(mensagem) {
+			
+			
 			alert(mensagem);
 
 			// Limpa o carrinho após finalizar
@@ -459,8 +471,11 @@
 			document.getElementById("quantidadeProduto").value = 1;
 			document.getElementById("vendaSemCliente").checked = false;
 
-			// Recarrega a página para atualizar estoque dos produtos
-			window.location.reload();
+			if (modoEdicao) {
+				window.location.href = "/relatorios";
+			} else {
+				window.location.reload();
+			}
 		})
 		.catch(function(erro) {
 			alert("Erro ao finalizar venda: " + erro.message);
@@ -468,10 +483,22 @@
 	}
 	
 	/*
-	 * Mostra a data atual na tela de vendas.
+	 * Mostra a data atual do computador no formato yyyy-MM-dd.
+	 * Usa o horário local, evitando erro de fuso horário.
 	 */
-	 document.getElementById("dataVenda").value =
-			new Date().toISOString().split("T")[0];
+	const hoje = new Date();
+
+	const dataAtual =
+		hoje.getFullYear() + "-" +
+		String(hoje.getMonth() + 1).padStart(2, "0") + "-" +
+		String(hoje.getDate()).padStart(2, "0");
+
+	document.getElementById("dataVenda").value = dataAtual;
+
+	/*
+	 * Impede o usuário de alterar a data manualmente.
+	 */
+	document.getElementById("dataVenda").readOnly = true;
 	// Checkbox venda sem cliente
 	 const checkboxSemCliente = document
 	 	.getElementById("vendaSemCliente");
@@ -498,6 +525,72 @@
 	 		campoCliente.setAttribute("required", "required");
 	 	}
 	 });
+	 
+	 /*
+	  * Configura a tela quando ela for aberta para edição de venda.
+	  */
+
+	  if (modoEdicao) {
+
+			document.getElementById("btnFinalizarVenda").textContent = "Salvar Alterações";
+			document.getElementById("btnVoltarRelatorios").style.display = "inline-block";
+
+			if (clienteEdicao !== "") {
+				document.getElementById("clienteSelecionado").value = clienteEdicao;
+			} else {
+				document.getElementById("vendaSemCliente").checked = true;
+				document.getElementById("clienteSelecionado").disabled = true;
+			}
+
+			document.querySelectorAll(".item-edicao").forEach(function(item) {
+
+				const idProduto = Number(item.getAttribute("data-id-produto"));
+				const nome = item.getAttribute("data-nome-produto");
+				const preco = Number(item.getAttribute("data-preco"));
+				const quantidade = Number(item.getAttribute("data-quantidade"));
+				const estoque = Number(item.getAttribute("data-estoque"));
+
+				carrinho.push({
+					idProduto: idProduto,
+					nome: nome,
+					preco: preco,
+					estoque: estoque,
+					quantidade: quantidade,
+					subtotal: preco * quantidade
+				});
+			});
+			
+			/*
+			 * Ajusta o estoque original dos produtos que já estavam na venda.
+			 */
+			carrinho.forEach(function(itemCarrinho) {
+
+				const opcoes = document.querySelectorAll("#listaProdutos option");
+
+				opcoes.forEach(function(opcao) {
+
+					const idProduto = Number(opcao.getAttribute("data-id"));
+
+					if (idProduto === itemCarrinho.idProduto) {
+
+						opcao.setAttribute(
+							"data-estoque-original",
+							itemCarrinho.estoque
+						);
+
+						opcao.setAttribute(
+							"data-estoque",
+							itemCarrinho.estoque
+						);
+					}
+				});
+			});
+
+			atualizarCarrinho();
+			atualizarListaProdutos();
+			
+			
+		}
 	
 </script>
 </body>

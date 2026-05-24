@@ -22,38 +22,26 @@
 		<section class="area-filtros">
 
 			<div>
-				<label>Data inicial:</label>
-
-				<input type="date" id="dataInicial">
+				<label>Data inicial:</label> <input type="date" id="dataInicial">
 			</div>
 
 			<div>
-				<label>Data final:</label>
-
-				<input type="date" id="dataFinal">
+				<label>Data final:</label> <input type="date" id="dataFinal">
 			</div>
 
 			<div>
-				<label>Cliente:</label>
-
-				<input list="listaClientes"
-					id="clienteFiltro"
-					placeholder="Digite o nome do cliente">
+				<label>Cliente:</label> <input list="listaClientes"
+					id="clienteFiltro" placeholder="Digite o nome do cliente">
 
 				<datalist id="listaClientes">
-					<option th:each="cliente : ${clientes}"
-						th:value="${cliente.nome}">
+					<option th:each="cliente : ${clientes}" th:value="${cliente.nome}">
 					</option>
 				</datalist>
 			</div>
 
-			<button type="button" onclick="filtrarVendas()">
-				Buscar
-			</button>
+			<button type="button" onclick="filtrarVendas()">Buscar</button>
 
-			<button type="button" onclick="limparFiltros()">
-				Limpar
-			</button>
+			<button type="button" onclick="limparFiltros()">Limpar</button>
 
 		</section>
 
@@ -62,7 +50,14 @@
 			<!-- Vendas realizadas -->
 			<section class="area-vendas">
 
-				<h2>Vendas realizadas</h2>
+				<div class="cabecalho-vendas-relatorio">
+
+					<h2>Vendas realizadas</h2>
+
+					<div id="resumoFiltro" class="resumo-filtro">Resumo geral: 0
+						vendas | Total: R$ 0.00</div>
+
+				</div>
 
 				<div class="tabela-scroll">
 
@@ -80,15 +75,12 @@
 
 						<tbody>
 							<tr th:each="venda : ${vendas}" class="linha-venda"
-								th:data-id="${venda.idVenda}"
-								th:data-data="${venda.dataVenda}"
+								th:data-id="${venda.idVenda}" th:data-data="${venda.dataVenda}"
 								th:data-cliente="${venda.cliente != null ? venda.cliente.nome : 'Sem cliente'}"
 								th:data-total="${venda.valorTotal}">
 
-								<td>
-									<input type="radio" name="vendaSelecionada"
-										onchange="selecionarVenda(this.closest('tr'))">
-								</td>
+								<td><input type="radio" name="vendaSelecionada"
+									onchange="selecionarVenda(this.closest('tr'))"></td>
 
 								<td th:text="${venda.idVenda}"></td>
 
@@ -138,17 +130,26 @@
 				</div>
 
 				<div class="area-total-relatorio">
-					<span>Total da venda:</span>
-					<strong>R$ <span id="totalVendaSelecionada">0.00</span></strong>
+					<span>Total da venda:</span> <strong>R$ <span
+						id="totalVendaSelecionada">0.00</span></strong>
 				</div>
 
-				<button type="button"
-					class="btn-excluir-venda"
-					onclick="excluirVendaSelecionada()">
+				<div class="area-acoes-venda">
 
-					Excluir Venda
+					<p id="textoInstrucaoVenda" class="texto-instrucao-venda">
+						Selecione uma venda para visualizar os detalhes.</p>
 
-				</button>
+					<button type="button" id="btnEditarVenda" class="btn-acao-venda"
+						onclick="editarVendaSelecionada()" style="display: none;">
+
+						Editar Venda</button>
+
+					<button type="button" id="btnExcluirVenda" class="btn-acao-venda"
+						onclick="excluirVendaSelecionada()" style="display: none;">
+
+						Excluir Venda</button>
+
+				</div>
 
 			</section>
 
@@ -164,8 +165,7 @@
 					th:data-produto="${item.produto.nome}"
 					th:data-quantidade="${item.quantidade}"
 					th:data-preco="${item.precoUnitario}"
-					th:data-subtotal="${item.precoUnitario * item.quantidade}">
-				</div>
+					th:data-subtotal="${item.precoUnitario * item.quantidade}"></div>
 
 			</div>
 
@@ -189,6 +189,10 @@
 					linha.getAttribute("data-total")).toFixed(2);
 
 			carregarItensVenda(vendaSelecionadaId);
+			
+			document.getElementById("btnEditarVenda").style.display = "inline-block";
+			document.getElementById("btnExcluirVenda").style.display = "inline-block";
+			document.getElementById("textoInstrucaoVenda").style.display = "none";
 		}
 
 		function carregarItensVenda(idVenda) {
@@ -221,6 +225,25 @@
 					</tr>
 				`;
 			});
+		}
+		
+		function atualizarResumoFiltro(textoBase) {
+
+			let quantidade = 0;
+			let total = 0;
+
+			document.querySelectorAll(".linha-venda").forEach(function(linha) {
+
+				if (linha.style.display !== "none") {
+
+					quantidade++;
+
+					total += Number(linha.getAttribute("data-total"));
+				}
+			});
+
+			document.getElementById("resumoFiltro").textContent =
+				textoBase + ": " + quantidade + " vendas | Total: R$ " + total.toFixed(2);
 		}
 
 		function filtrarVendas() {
@@ -259,6 +282,8 @@
 					linha.style.display = "none";
 				}
 			});
+			
+			atualizarResumoFiltro("Período filtrado");
 		}
 
 		function limparFiltros() {
@@ -269,6 +294,19 @@
 			document.querySelectorAll(".linha-venda").forEach(function(linha) {
 				linha.style.display = "";
 			});
+			
+			
+			atualizarResumoFiltro("Resumo geral");
+		}
+		
+		function editarVendaSelecionada() {
+
+			if (vendaSelecionadaId == null) {
+				alert("Selecione uma venda.");
+				return;
+			}
+
+			window.location.href = "/vendas/editar?id=" + vendaSelecionadaId;
 		}
 
 		function excluirVendaSelecionada() {
@@ -286,6 +324,8 @@
 
 			window.location.href = "/relatorios/excluir?id=" + vendaSelecionadaId;
 		}
+		
+		atualizarResumoFiltro("Resumo geral");
 	</script>
 
 </body>

@@ -30,9 +30,8 @@
 
 					<!-- Barra de pesquisa -->
 					<div class="barra-pesquisa">
-						<span class="icone-lupa">🔍</span>
-
-						<input type="text" id="campoPesquisa" placeholder="Buscar...">
+						<span class="icone-lupa">🔍</span> <input type="text"
+							id="campoPesquisa" placeholder="Buscar...">
 					</div>
 
 					<!-- Área com rolagem horizontal e vertical -->
@@ -58,58 +57,55 @@
 							</thead>
 
 							<tbody>
+							<tbody>
 
-								<tbody>
+								<tr th:each="fornecedor : ${fornecedores}"
+									class="linha-fornecedor">
 
-	<tr th:each="fornecedor : ${fornecedores}"
-		class="linha-fornecedor">
+									<td class="coluna-selecao" style="display: none;"><input
+										type="checkbox" name="idsSelecionados"
+										th:value="${fornecedor.idFornecedor}"></td>
 
-		<td class="coluna-selecao" style="display: none;">
-			<input type="checkbox" name="idsSelecionados"
-				th:value="${fornecedor.idFornecedor}">
-		</td>
+									<td th:text="${fornecedor.idFornecedor}"></td>
 
-		<td th:text="${fornecedor.idFornecedor}"></td>
+									<td class="nome-fornecedor"
+										th:text="${fornecedor.nomeFantasia}"></td>
 
-		<td class="nome-fornecedor"
-			th:text="${fornecedor.nomeFantasia}">
-		</td>
+									<td th:text="${fornecedor.cnpj}"></td>
 
-		<td th:text="${fornecedor.cnpj}"></td>
+									<td th:text="${fornecedor.contratoSocial}"></td>
 
-		<td th:text="${fornecedor.contratoSocial}"></td>
+									<td
+										th:text="${fornecedor.endereco != null ? fornecedor.endereco.rua : '-'}">
+									</td>
 
-		<td
-			th:text="${fornecedor.endereco != null ? fornecedor.endereco.rua : '-'}">
-		</td>
+									<td
+										th:text="${fornecedor.endereco != null ? fornecedor.endereco.cidade : '-'}">
+									</td>
 
-		<td
-			th:text="${fornecedor.endereco != null ? fornecedor.endereco.cidade : '-'}">
-		</td>
+									<td
+										th:text="${fornecedor.endereco != null ? fornecedor.endereco.estado : '-'}">
+									</td>
 
-		<td
-			th:text="${fornecedor.endereco != null ? fornecedor.endereco.estado : '-'}">
-		</td>
+									<td
+										th:text="${fornecedor.endereco != null ? fornecedor.endereco.cep : '-'}">
+									</td>
 
-		<td
-			th:text="${fornecedor.endereco != null ? fornecedor.endereco.cep : '-'}">
-		</td>
+									<td
+										th:text="${fornecedor.contato != null ? fornecedor.contato.telefone : '-'}">
+									</td>
 
-		<td
-			th:text="${fornecedor.contato != null ? fornecedor.contato.telefone : '-'}">
-		</td>
+									<td
+										th:text="${fornecedor.contato != null ? fornecedor.contato.celular : '-'}">
+									</td>
 
-		<td
-			th:text="${fornecedor.contato != null ? fornecedor.contato.celular : '-'}">
-		</td>
+									<td
+										th:text="${fornecedor.contato != null ? fornecedor.contato.email : '-'}">
+									</td>
 
-		<td
-			th:text="${fornecedor.contato != null ? fornecedor.contato.email : '-'}">
-		</td>
+								</tr>
 
-	</tr>
-
-</tbody>
+							</tbody>
 
 							</tbody>
 
@@ -126,19 +122,16 @@
 
 				<a href="/fornecedores/novo">
 					<button type="button" id="btnCadastrar">
-						<img src="/img/icone-cadastrar.png" class="icone-botao">
-						<span>Cadastrar</span>
+						<img src="/img/icone-cadastrar.png" class="icone-botao"> <span>Cadastrar</span>
 					</button>
 				</a>
 
 				<button type="button" id="btnEditar" onclick="ativarModoEditar()">
-					<img src="/img/icone-editar.png" class="icone-botao">
-					<span>Editar</span>
+					<img src="/img/icone-editar.png" class="icone-botao"> <span>Editar</span>
 				</button>
 
 				<button type="button" id="btnExcluir" onclick="ativarModoExcluir()">
-					<img src="/img/icone-excluir.png" class="icone-botao">
-					<span>Excluir</span>
+					<img src="/img/icone-excluir.png" class="icone-botao"> <span>Excluir</span>
 				</button>
 
 				<button type="button" id="btnConfirmar" onclick="confirmarAcao()"
@@ -157,12 +150,20 @@
 		let modoAtual = "";
 
 		function mostrarSelecao() {
-			document.querySelectorAll(".coluna-selecao").forEach(function(coluna) {
-				coluna.style.display = "table-cell";
-			});
 
-			document.getElementById("btnConfirmar").style.display = "inline-block";
-			document.getElementById("btnCancelar").style.display = "inline-block";
+			document.querySelectorAll(".coluna-selecao").forEach(
+					function(coluna) {
+						coluna.style.display = "table-cell";
+					});
+
+			/* Esconde os botões principais */
+			document.getElementById("btnCadastrar").style.display = "none";
+			document.getElementById("btnEditar").style.display = "none";
+			document.getElementById("btnExcluir").style.display = "none";
+
+			/* Mostra confirmar e cancelar */
+			document.getElementById("btnConfirmar").style.display = "";
+			document.getElementById("btnCancelar").style.display = "";
 		}
 
 		function ativarModoEditar() {
@@ -178,20 +179,28 @@
 		function cancelarSelecao() {
 			modoAtual = "";
 
-			document.querySelectorAll("input[name='idsSelecionados']").forEach(function(checkbox) {
-				checkbox.checked = false;
-			});
+			document.querySelectorAll("input[name='idsSelecionados']").forEach(
+					function(checkbox) {
+						checkbox.checked = false;
+					});
 
-			document.querySelectorAll(".coluna-selecao").forEach(function(coluna) {
-				coluna.style.display = "none";
-			});
+			document.querySelectorAll(".coluna-selecao").forEach(
+					function(coluna) {
+						coluna.style.display = "none";
+					});
 
 			document.getElementById("btnConfirmar").style.display = "none";
 			document.getElementById("btnCancelar").style.display = "none";
+			
+			/* Mostra novamente os botões principais */
+			document.getElementById("btnCadastrar").style.display = "";
+			document.getElementById("btnEditar").style.display = "";
+			document.getElementById("btnExcluir").style.display = "";
 		}
 
 		function confirmarAcao() {
-			const selecionados = document.querySelectorAll("input[name='idsSelecionados']:checked");
+			const selecionados = document
+					.querySelectorAll("input[name='idsSelecionados']:checked");
 
 			if (selecionados.length === 0) {
 				alert("Selecione pelo menos um fornecedor.");
@@ -222,20 +231,25 @@
 			}
 		}
 
-		document.getElementById("campoPesquisa").addEventListener("input", function() {
-			const textoBusca = this.value.toLowerCase();
-			const linhas = document.querySelectorAll(".linha-fornecedor");
+		document.getElementById("campoPesquisa").addEventListener(
+				"input",
+				function() {
+					const textoBusca = this.value.toLowerCase();
+					const linhas = document
+							.querySelectorAll(".linha-fornecedor");
 
-			linhas.forEach(function(linha) {
-				const nomeFornecedor = linha.querySelector(".nome-fornecedor").textContent.toLowerCase();
+					linhas.forEach(function(linha) {
+						const nomeFornecedor = linha
+								.querySelector(".nome-fornecedor").textContent
+								.toLowerCase();
 
-				if (nomeFornecedor.includes(textoBusca)) {
-					linha.style.display = "";
-				} else {
-					linha.style.display = "none";
-				}
-			});
-		});
+						if (nomeFornecedor.includes(textoBusca)) {
+							linha.style.display = "";
+						} else {
+							linha.style.display = "none";
+						}
+					});
+				});
 	</script>
 
 </body>
