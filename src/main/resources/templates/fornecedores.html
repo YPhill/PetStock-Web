@@ -122,7 +122,8 @@
 
 				<a href="/fornecedores/novo">
 					<button type="button" id="btnCadastrar">
-						<img src="/img/icone-cadastrar.png" class="icone-botao"> <span>Cadastrar</span>
+						<img src="/img/icone-Add_fornecedor.png" class="icone-botao">
+						<span>Cadastrar</span>
 					</button>
 				</a>
 
@@ -131,14 +132,23 @@
 				</button>
 
 				<button type="button" id="btnExcluir" onclick="ativarModoExcluir()">
-					<img src="/img/icone-excluir.png" class="icone-botao"> <span>Excluir</span>
+					<img src="/img/icone-lixeira-de-reciclagem.png" class="icone-botao">
+					<span>Excluir</span>
 				</button>
 
 				<button type="button" id="btnConfirmar" onclick="confirmarAcao()"
-					style="display: none;">Confirmar</button>
+					style="display: none;">
+
+					<img src="/img/icone-finalizado.png" class="icone-botao"> <span>Confirmar</span>
+
+				</button>
 
 				<button type="button" id="btnCancelar" onclick="cancelarSelecao()"
-					style="display: none;">Cancelar</button>
+					style="display: none;">
+
+					<img src="/img/icone-x.png" class="icone-botao"> <span>Cancelar</span>
+
+				</button>
 
 			</div>
 
@@ -162,8 +172,8 @@
 			document.getElementById("btnExcluir").style.display = "none";
 
 			/* Mostra confirmar e cancelar */
-			document.getElementById("btnConfirmar").style.display = "";
-			document.getElementById("btnCancelar").style.display = "";
+			document.getElementById("btnConfirmar").style.display = "grid";
+			document.getElementById("btnCancelar").style.display = "grid";
 		}
 
 		function ativarModoEditar() {
@@ -191,7 +201,7 @@
 
 			document.getElementById("btnConfirmar").style.display = "none";
 			document.getElementById("btnCancelar").style.display = "none";
-			
+
 			/* Mostra novamente os botões principais */
 			document.getElementById("btnCadastrar").style.display = "";
 			document.getElementById("btnEditar").style.display = "";

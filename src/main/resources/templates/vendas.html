@@ -73,12 +73,21 @@
 
 				<!-- Botão adicionar -->
 				<button type="button" class="btn-adicionar"
-					onclick="adicionarAoCarrinho()">Adicionar ao carrinho</button>
+					onclick="adicionarAoCarrinho()">
+
+					<img src="/img/icone-adicionar-ao-carrinho.png" class="icone-botao">
+					<span>Adicionar ao carrinho</span>
+
+				</button>
 
 				<button type="button" id="btnVoltarRelatorios"
 					class="btn-voltar-relatorios"
-					onclick="window.location.href='/relatorios'" style="display: none;">Voltar
-					para Relatórios</button>
+					onclick="window.location.href='/relatorios'" style="display: none;">
+
+					<img src="/img/icone-voltar.png" class="icone-botao"> <span>Voltar
+						para Relatórios</span>
+
+				</button>
 
 
 
@@ -126,17 +135,32 @@
 				<div class="botoes-carrinho">
 
 					<button type="button" onclick="finalizarVenda()"
-						id="btnFinalizarVenda">Finalizar Venda</button>
+						id="btnFinalizarVenda">
+
+						<img src="/img/icone-finalizado.png" class="icone-botao"> <span>Finalizar
+							Venda</span>
+
+					</button>
 
 					<button type="button" onclick="editarItemCarrinho()">
-						Editar Item</button>
+
+						<img src="/img/icone-editar.png" class="icone-botao"> <span>Editar
+							Item</span>
+
+					</button>
 
 					<button type="button" onclick="removerItemCarrinho()">
-						Remover Item</button>
 
-					<button type="button" onclick="limparCarrinho()">Limpar</button>
+						<img src="/img/icone-lixeira-de-reciclagem.png"
+							class="icone-botao"> <span>Remover Item</span>
 
+					</button>
 
+					<button type="button" onclick="limparCarrinho()">
+
+						<img src="/img/icone-vassoura.png" class="icone-botao"> <span>Limpar</span>
+
+					</button>
 
 				</div>
 
@@ -532,8 +556,11 @@ fetch(urlVenda, {
 
 	  if (modoEdicao) {
 
-			document.getElementById("btnFinalizarVenda").textContent = "Salvar Alterações";
-			document.getElementById("btnVoltarRelatorios").style.display = "inline-block";
+		  document.getElementById("btnFinalizarVenda").innerHTML = `
+				<img src="/img/icone-finalizado.png" class="icone-botao">
+				<span>Salvar Alterações</span>
+			`;
+			document.getElementById("btnVoltarRelatorios").style.display = "grid";
 
 			if (clienteEdicao !== "") {
 				document.getElementById("clienteSelecionado").value = clienteEdicao;

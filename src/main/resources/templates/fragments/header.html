@@ -3,51 +3,48 @@
 
 <body>
 
-    <!-- Fragmento reutilizável do cabeçalho -->
-    <header th:fragment="header" class="topo">
+	<!-- Fragmento reutilizável do cabeçalho -->
+	<header th:fragment="header" class="topo">
 
-        <!-- Faixa superior com logo e nome do sistema -->
-        <div class="topo-logo">
+		<!-- Faixa superior com logo e nome do sistema -->
+		<div class="topo-logo">
 
-            <div class="logo-area">
+			<a href="/" class="logo-area"> <img
+				src="/img/icone-Cachorro_Logo.png" class="logo-icone"
+				alt="Logo PetStock"> <span class="logo-texto">PETSTOCK</span>
 
-                <!-- Ícone provisório até colocarmos a imagem oficial -->
-                <span class="logo-icone">🐶</span>
+			</a>
 
-                <!-- Nome do sistema -->
-                <span class="logo-texto">PETSTOCK</span>
+		</div>
 
-            </div>
+		<!-- Menu principal do sistema -->
+		<nav class="menu">
 
-        </div>
+			<a href="/"
+				th:classappend="${paginaAtual == 'inicio'} ? 'ativo' : ''">Início</a>
 
-        <!-- Menu principal do sistema -->
-        <nav class="menu">
+			<a href="/clientes"
+				th:classappend="${paginaAtual == 'clientes'} ? 'ativo' : ''">Cliente</a>
 
-    <a href="/"
-       th:classappend="${paginaAtual == 'inicio'} ? 'ativo' : ''">Início</a>
+			<a href="/fornecedores"
+				th:classappend="${paginaAtual == 'fornecedores'} ? 'ativo' : ''">Fornecedor</a>
 
-    <a href="/clientes"
-       th:classappend="${paginaAtual == 'clientes'} ? 'ativo' : ''">Cliente</a>
+			<a href="/produtos"
+				th:classappend="${paginaAtual == 'produtos'} ? 'ativo' : ''">Produtos</a>
 
-    <a href="/fornecedores"
-       th:classappend="${paginaAtual == 'fornecedores'} ? 'ativo' : ''">Fornecedor</a>
+			<a href="/estoque"
+				th:classappend="${paginaAtual == 'estoque'} ? 'ativo' : ''">Estoque</a>
 
-    <a href="/produtos"
-       th:classappend="${paginaAtual == 'produtos'} ? 'ativo' : ''">Produtos</a>
+			<a href="/vendas"
+				th:classappend="${paginaAtual == 'vendas'} ? 'ativo' : ''">Vendas</a>
 
-    <a href="/estoque"
-       th:classappend="${paginaAtual == 'estoque'} ? 'ativo' : ''">Estoque</a>
+			<a href="/relatorios"
+				th:classappend="${paginaAtual == 'relatorios'} ? 'ativo' : ''">Gestão
+				de Vendas</a>
 
-    <a href="/vendas"
-       th:classappend="${paginaAtual == 'vendas'} ? 'ativo' : ''">Vendas</a>
+		</nav>
 
-    <a href="/relatorios"
-       th:classappend="${paginaAtual == 'relatorios'} ? 'ativo' : ''">Gestão de Vendas</a>
-
-</nav>
-
-    </header>
+	</header>
 
 </body>
 

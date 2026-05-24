@@ -17,12 +17,18 @@
 .logo-area {
     display: flex;
     align-items: center;
-    gap: 12px;
+    padding-left: 10%;
+    text-decoration: none;
 }
 
 /* Ícone provisório do cachorro */
 .logo-icone {
-    font-size: 48px;
+	width: 180px;
+	height: 180px;
+	object-fit: contain;
+
+	position: relative;
+	top: 14px;
 }
 
 /* Texto PETSTOCK */

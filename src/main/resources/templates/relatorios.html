@@ -30,8 +30,12 @@
 			</div>
 
 			<div>
-				<label>Cliente:</label> <input list="listaClientes"
-					id="clienteFiltro" placeholder="Digite o nome do cliente">
+				<label>Cliente:</label>
+
+				<div class="campo-cliente-filtro">
+					<span class="icone-lupa">🔍</span> <input list="listaClientes"
+						id="clienteFiltro" placeholder="Digite o nome do cliente">
+				</div>
 
 				<datalist id="listaClientes">
 					<option th:each="cliente : ${clientes}" th:value="${cliente.nome}">
@@ -41,7 +45,13 @@
 
 			<button type="button" onclick="filtrarVendas()">Buscar</button>
 
-			<button type="button" onclick="limparFiltros()">Limpar</button>
+			<button type="button" onclick="limparFiltros()">
+
+				<img src="/img/icone-vassoura.png" class="icone-botao-filtro">
+
+				<span>Limpar</span>
+
+			</button>
 
 		</section>
 
@@ -142,12 +152,18 @@
 					<button type="button" id="btnEditarVenda" class="btn-acao-venda"
 						onclick="editarVendaSelecionada()" style="display: none;">
 
-						Editar Venda</button>
+						<img src="/img/icone-editar.png" class="icone-botao-acao"> <span>Editar
+							Venda</span>
+
+					</button>
 
 					<button type="button" id="btnExcluirVenda" class="btn-acao-venda"
 						onclick="excluirVendaSelecionada()" style="display: none;">
 
-						Excluir Venda</button>
+						<img src="/img/icone-lixeira-de-reciclagem.png"
+							class="icone-botao-acao"> <span>Excluir Venda</span>
+
+					</button>
 
 				</div>
 
@@ -190,8 +206,8 @@
 
 			carregarItensVenda(vendaSelecionadaId);
 			
-			document.getElementById("btnEditarVenda").style.display = "inline-block";
-			document.getElementById("btnExcluirVenda").style.display = "inline-block";
+			document.getElementById("btnEditarVenda").style.display = "grid";
+			document.getElementById("btnExcluirVenda").style.display = "grid";
 			document.getElementById("textoInstrucaoVenda").style.display = "none";
 		}
 
