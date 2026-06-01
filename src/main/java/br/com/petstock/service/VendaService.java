@@ -38,7 +38,7 @@ public class VendaService {
 	 */
 	public List<Venda> listarTodas() {
 
-		return vendaRepository.findAll();
+		return vendaRepository.findAllByOrderByIdVendaDesc();
 	}
 
 	/*

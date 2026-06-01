@@ -5,7 +5,6 @@
 <meta charset="UTF-8">
 <title>PetStock</title>
 
-<!-- CSS global -->
 <link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="/css/header.css">
 <link rel="stylesheet" href="/css/index.css">
@@ -13,7 +12,6 @@
 
 <body>
 
-	<!-- Cabeçalho padrão -->
 	<div th:replace="~{fragments/header :: header}"></div>
 
 	<main class="conteudo">
@@ -23,51 +21,27 @@
 			<h1>Bem-vindo ao PetStock</h1>
 
 			<p>
-				Gerencie clientes, fornecedores, produtos, estoque e vendas
-				de forma simples e organizada.
+				Acesse rapidamente as principais ações de venda, consulte vendas
+				realizadas e gerencie as informações essenciais do sistema.
 			</p>
 
-		</section>
+			<div class="acoes-principais">
 
-		<section class="cards-inicio">
+				<a href="/vendas" class="acao-principal">
+					<h2>Registrar nova venda</h2>
+					<p>Inicie uma venda e adicione produtos ao carrinho.</p>
+				</a>
 
-			<a href="/clientes" class="card-inicio">
-				
-				<h2>Clientes</h2>
-				<p>Consulte e cadastre clientes.</p>
-			</a>
+				<a href="/relatorios" class="acao-principal">
+					<h2>Gestão de vendas</h2>
+					<p>Consulte, edite ou exclua vendas realizadas.</p>
+				</a>
 
-			<a href="/fornecedores" class="card-inicio">
-				
-				<h2>Fornecedores</h2>
-				<p>Organize os fornecedores.</p>
-			</a>
-
-			<a href="/produtos" class="card-inicio">
-				
-				<h2>Produtos</h2>
-				<p>Gerencie produtos cadastrados.</p>
-			</a>
-
-			<a href="/estoque" class="card-inicio">
-				
-				<h2>Estoque</h2>
-				<p>Acompanhe entradas e saídas.</p>
-			</a>
-
-			<a href="/vendas" class="card-inicio">
-				
-				<h2>Vendas</h2>
-				<p>Registre novas vendas.</p>
-			</a>
-
-			<a href="/relatorios" class="card-inicio">
-				
-				<h2>Relatórios</h2>
-				<p>Visualize vendas realizadas.</p>
-			</a>
+			</div>
 
 		</section>
+
+		
 
 	</main>
 

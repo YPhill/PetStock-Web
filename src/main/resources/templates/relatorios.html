@@ -47,7 +47,7 @@
 
 			<button type="button" onclick="limparFiltros()">
 
-				<img src="/img/icone-vassoura.png" class="icone-botao-filtro">
+				<img src="/img/icone-limpar.png" class="icone-botao-filtro">
 
 				<span>Limpar</span>
 
@@ -100,7 +100,7 @@
 									th:text="${venda.cliente != null ? venda.cliente.nome : 'Sem cliente'}">
 								</td>
 
-								<td th:text="${venda.valorTotal}"></td>
+								<td th:text="${'R$ ' + #numbers.formatDecimal(venda.valorTotal, 1, 'POINT', 2, 'COMMA')}"></td>
 
 							</tr>
 						</tbody>
@@ -160,7 +160,7 @@
 					<button type="button" id="btnExcluirVenda" class="btn-acao-venda"
 						onclick="excluirVendaSelecionada()" style="display: none;">
 
-						<img src="/img/icone-lixeira-de-reciclagem.png"
+						<img src="/img/icone-excluir.png"
 							class="icone-botao-acao"> <span>Excluir Venda</span>
 
 					</button>
@@ -190,159 +190,200 @@
 	</main>
 
 	<script>
-		let vendaSelecionadaId = null;
+	let vendaSelecionadaId = null;
 
-		function selecionarVenda(linha) {
-			vendaSelecionadaId = linha.getAttribute("data-id");
+	function formatarMoeda(valor) {
 
-			document.querySelectorAll(".linha-venda").forEach(function(item) {
-				item.style.backgroundColor = "";
-			});
+		return Number(valor)
+			.toFixed(2)
+			.replace(".", ",");
+	}
 
-			linha.style.backgroundColor = "#e8d6c3";
+	function selecionarVenda(linha) {
 
-			document.getElementById("totalVendaSelecionada").textContent = Number(
-					linha.getAttribute("data-total")).toFixed(2);
+		vendaSelecionadaId = linha.getAttribute("data-id");
 
-			carregarItensVenda(vendaSelecionadaId);
-			
-			document.getElementById("btnEditarVenda").style.display = "grid";
-			document.getElementById("btnExcluirVenda").style.display = "grid";
-			document.getElementById("textoInstrucaoVenda").style.display = "none";
+		document.querySelectorAll(".linha-venda").forEach(function(item) {
+			item.style.backgroundColor = "";
+		});
+
+		linha.style.backgroundColor = "#e8d6c3";
+
+		document.getElementById("totalVendaSelecionada").textContent =
+			formatarMoeda(linha.getAttribute("data-total"));
+
+		carregarItensVenda(vendaSelecionadaId);
+
+		document.getElementById("btnEditarVenda").style.display = "grid";
+		document.getElementById("btnExcluirVenda").style.display = "grid";
+		document.getElementById("textoInstrucaoVenda").style.display = "none";
+	}
+
+	function carregarItensVenda(idVenda) {
+
+		const tabelaItens = document.getElementById("tabelaItens");
+		const containerItens = document.getElementById("itens-venda-" + idVenda);
+
+		tabelaItens.innerHTML = "";
+
+		if (!containerItens) {
+
+			tabelaItens.innerHTML =
+				"<tr><td colspan='4'>Nenhum item encontrado.</td></tr>";
+
+			return;
 		}
 
-		function carregarItensVenda(idVenda) {
+		const itens = containerItens.querySelectorAll(".item-venda");
 
-			const tabelaItens = document.getElementById("tabelaItens");
-			const containerItens = document.getElementById("itens-venda-" + idVenda);
+		itens.forEach(function(item) {
 
-			tabelaItens.innerHTML = "";
+			const produto =
+				item.getAttribute("data-produto");
 
-			if (!containerItens) {
-				tabelaItens.innerHTML = "<tr><td colspan='4'>Nenhum item encontrado.</td></tr>";
-				return;
+			const quantidade =
+				item.getAttribute("data-quantidade");
+
+			const preco =
+				formatarMoeda(item.getAttribute("data-preco"));
+
+			const subtotal =
+				formatarMoeda(item.getAttribute("data-subtotal"));
+
+			tabelaItens.innerHTML += `
+				<tr>
+					<td>${produto}</td>
+					<td>${quantidade}</td>
+					<td>R$ ${preco}</td>
+					<td>R$ ${subtotal}</td>
+				</tr>
+			`;
+		});
+	}
+
+	function atualizarResumoFiltro(textoBase) {
+
+		let quantidade = 0;
+		let total = 0;
+
+		document.querySelectorAll(".linha-venda").forEach(function(linha) {
+
+			if (linha.style.display !== "none") {
+
+				quantidade++;
+
+				total += Number(linha.getAttribute("data-total"));
 			}
+		});
 
-			const itens = containerItens.querySelectorAll(".item-venda");
+		document.getElementById("resumoFiltro").textContent =
+			textoBase + ": "
+			+ quantidade
+			+ " vendas | Total: R$ "
+			+ formatarMoeda(total);
+	}
 
-			itens.forEach(function(item) {
+	function filtrarVendas() {
 
-				const produto = item.getAttribute("data-produto");
-				const quantidade = item.getAttribute("data-quantidade");
-				const preco = Number(item.getAttribute("data-preco")).toFixed(2);
-				const subtotal = Number(item.getAttribute("data-subtotal")).toFixed(2);
+		const dataInicial =
+			document.getElementById("dataInicial").value;
 
-				tabelaItens.innerHTML += `
-					<tr>
-						<td>${produto}</td>
-						<td>${quantidade}</td>
-						<td>R$ ${preco}</td>
-						<td>R$ ${subtotal}</td>
-					</tr>
-				`;
-			});
-		}
-		
-		function atualizarResumoFiltro(textoBase) {
+		const dataFinal =
+			document.getElementById("dataFinal").value;
 
-			let quantidade = 0;
-			let total = 0;
+		const clienteFiltro =
+			document.getElementById("clienteFiltro")
+				.value
+				.toLowerCase();
 
-			document.querySelectorAll(".linha-venda").forEach(function(linha) {
+		const linhas =
+			document.querySelectorAll(".linha-venda");
 
-				if (linha.style.display !== "none") {
+		linhas.forEach(function(linha) {
 
-					quantidade++;
+			const dataVenda =
+				linha.getAttribute("data-data");
 
-					total += Number(linha.getAttribute("data-total"));
-				}
-			});
-
-			document.getElementById("resumoFiltro").textContent =
-				textoBase + ": " + quantidade + " vendas | Total: R$ " + total.toFixed(2);
-		}
-
-		function filtrarVendas() {
-
-			const dataInicial = document.getElementById("dataInicial").value;
-			const dataFinal = document.getElementById("dataFinal").value;
-			const clienteFiltro = document.getElementById("clienteFiltro").value
+			const clienteVenda =
+				linha.getAttribute("data-cliente")
 					.toLowerCase();
 
-			const linhas = document.querySelectorAll(".linha-venda");
+			let mostrar = true;
 
-			linhas.forEach(function(linha) {
+			if (dataInicial !== ""
+				&& dataVenda < dataInicial) {
 
-				const dataVenda = linha.getAttribute("data-data");
-				const clienteVenda = linha.getAttribute("data-cliente")
-						.toLowerCase();
+				mostrar = false;
+			}
 
-				let mostrar = true;
+			if (dataFinal !== ""
+				&& dataVenda > dataFinal) {
 
-				if (dataInicial !== "" && dataVenda < dataInicial) {
-					mostrar = false;
-				}
+				mostrar = false;
+			}
 
-				if (dataFinal !== "" && dataVenda > dataFinal) {
-					mostrar = false;
-				}
+			if (clienteFiltro !== ""
+				&& !clienteVenda.includes(clienteFiltro)) {
 
-				if (clienteFiltro !== ""
-						&& !clienteVenda.includes(clienteFiltro)) {
-					mostrar = false;
-				}
+				mostrar = false;
+			}
 
-				if (mostrar) {
-					linha.style.display = "";
-				} else {
-					linha.style.display = "none";
-				}
-			});
-			
-			atualizarResumoFiltro("Período filtrado");
-		}
-
-		function limparFiltros() {
-			document.getElementById("dataInicial").value = "";
-			document.getElementById("dataFinal").value = "";
-			document.getElementById("clienteFiltro").value = "";
-
-			document.querySelectorAll(".linha-venda").forEach(function(linha) {
+			if (mostrar) {
 				linha.style.display = "";
-			});
-			
-			
-			atualizarResumoFiltro("Resumo geral");
-		}
-		
-		function editarVendaSelecionada() {
-
-			if (vendaSelecionadaId == null) {
-				alert("Selecione uma venda.");
-				return;
+			} else {
+				linha.style.display = "none";
 			}
+		});
 
-			window.location.href = "/vendas/editar?id=" + vendaSelecionadaId;
-		}
+		atualizarResumoFiltro("Período filtrado");
+	}
 
-		function excluirVendaSelecionada() {
+	function limparFiltros() {
 
-			if (vendaSelecionadaId == null) {
-				alert("Selecione uma venda.");
-				return;
-			}
+		document.getElementById("dataInicial").value = "";
+		document.getElementById("dataFinal").value = "";
+		document.getElementById("clienteFiltro").value = "";
 
-			const confirmar = confirm("Deseja realmente excluir esta venda?");
+		document.querySelectorAll(".linha-venda").forEach(function(linha) {
+			linha.style.display = "";
+		});
 
-			if (!confirmar) {
-				return;
-			}
-
-			window.location.href = "/relatorios/excluir?id=" + vendaSelecionadaId;
-		}
-		
 		atualizarResumoFiltro("Resumo geral");
-	</script>
+	}
+
+	function editarVendaSelecionada() {
+
+		if (vendaSelecionadaId == null) {
+
+			alert("Selecione uma venda.");
+			return;
+		}
+
+		window.location.href =
+			"/vendas/editar?id=" + vendaSelecionadaId;
+	}
+
+	function excluirVendaSelecionada() {
+
+		if (vendaSelecionadaId == null) {
+
+			alert("Selecione uma venda.");
+			return;
+		}
+
+		const confirmar =
+			confirm("Deseja realmente excluir esta venda?");
+
+		if (!confirmar) {
+			return;
+		}
+
+		window.location.href =
+			"/relatorios/excluir?id=" + vendaSelecionadaId;
+	}
+
+	atualizarResumoFiltro("Resumo geral");
+</script>
 
 </body>
 

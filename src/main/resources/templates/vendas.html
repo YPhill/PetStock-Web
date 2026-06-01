@@ -3,49 +3,46 @@
 
 <head>
 
-<!-- Importa o CSS principal do sistema -->
 <link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="/css/header.css">
 <link rel="stylesheet" href="/css/vendas.css">
 <meta charset="UTF-8">
 <title>Vendas - PetStock</title>
+
 </head>
 
 <body>
-	<!-- Insere o cabeçalho padrão -->
+
 	<div th:replace="~{fragments/header :: header}"></div>
 
-	<!-- Conteúdo principal da página -->
 	<main class="conteudo">
 
 		<div class="layout-vendas">
 
-			<!-- Área esquerda -->
 			<section class="area-form-venda">
 
-				<!-- Venda sem cliente -->
 				<div class="campo-checkbox">
-					<input type="checkbox" id="vendaSemCliente"> <label>Venda
-						sem cliente</label>
+					<input type="checkbox" id="vendaSemCliente">
+					<label>Venda sem cliente</label>
 				</div>
 
-				<!-- Cliente -->
 				<div>
-					<label>Cliente</label> <input list="listaClientes"
-						id="clienteSelecionado" placeholder="Digite o nome do cliente">
+					<label>Cliente</label>
+					<input list="listaClientes" id="clienteSelecionado"
+						placeholder="Digite o nome do cliente">
 
 					<datalist id="listaClientes">
-						<option th:each="cliente : ${clientes}" th:value="${cliente.nome}"
-							th:data-id="${cliente.idCliente}"></option>
+						<option th:each="cliente : ${clientes}"
+							th:value="${cliente.nome}"
+							th:data-id="${cliente.idCliente}">
+						</option>
 					</datalist>
 				</div>
 
-
-
-				<!-- Produto -->
 				<div>
-					<label>Produto</label> <input list="listaProdutos"
-						id="produtoSelecionado" placeholder="Digite o nome do produto"
+					<label>Produto</label>
+					<input list="listaProdutos" id="produtoSelecionado"
+						placeholder="Digite o nome do produto"
 						onchange="preencherProduto()">
 
 					<datalist id="listaProdutos">
@@ -60,49 +57,45 @@
 					</datalist>
 				</div>
 
-				<!-- Preço -->
 				<div>
-					<label>Preço</label> <input type="text" id="precoProduto" readonly>
+					<label>Preço</label>
+					<input type="text" id="precoProduto" readonly>
 				</div>
 
-				<!-- Quantidade -->
 				<div>
-					<label>Quantidade</label> <input type="number"
-						id="quantidadeProduto" min="1" value="1">
+					<label>Quantidade</label>
+					<input type="number" id="quantidadeProduto" min="1" value="1">
 				</div>
 
-				<!-- Botão adicionar -->
 				<button type="button" class="btn-adicionar"
 					onclick="adicionarAoCarrinho()">
 
-					<img src="/img/icone-adicionar-ao-carrinho.png" class="icone-botao">
+					<img src="/img/icone-adicionar-carrinho.png" class="icone-botao">
 					<span>Adicionar ao carrinho</span>
 
 				</button>
 
 				<button type="button" id="btnVoltarRelatorios"
 					class="btn-voltar-relatorios"
-					onclick="window.location.href='/relatorios'" style="display: none;">
+					onclick="window.location.href='/relatorios'"
+					style="display: none;">
 
-					<img src="/img/icone-voltar.png" class="icone-botao"> <span>Voltar
-						para Relatórios</span>
+					<img src="/img/icone-voltar.png" class="icone-botao">
+					<span>Voltar para Relatórios</span>
 
 				</button>
 
-
-
 			</section>
 
-			<!-- Área direita -->
 			<section class="area-carrinho">
 
-				<!-- Cabeçalho do carrinho -->
 				<div class="cabecalho-carrinho">
 
 					<h2>Itens da venda</h2>
 
 					<div class="data-venda">
-						<span>Data</span> <input type="date" id="dataVenda">
+						<span>Data</span>
+						<input type="date" id="dataVenda">
 					</div>
 
 				</div>
@@ -121,7 +114,6 @@
 						</thead>
 
 						<tbody id="tabelaCarrinho">
-							<!-- Itens adicionados via JavaScript -->
 						</tbody>
 
 					</table>
@@ -129,7 +121,8 @@
 				</div>
 
 				<div class="area-total">
-					<span>Total :</span> <strong>R$ <span id="valorTotal">0.00</span></strong>
+					<span>Total :</span>
+					<strong>R$ <span id="valorTotal">0,00</span></strong>
 				</div>
 
 				<div class="botoes-carrinho">
@@ -137,28 +130,29 @@
 					<button type="button" onclick="finalizarVenda()"
 						id="btnFinalizarVenda">
 
-						<img src="/img/icone-finalizado.png" class="icone-botao"> <span>Finalizar
-							Venda</span>
+						<img src="/img/icone-finalizar.png" class="icone-botao">
+						<span>Finalizar Venda</span>
 
 					</button>
 
 					<button type="button" onclick="editarItemCarrinho()">
 
-						<img src="/img/icone-editar.png" class="icone-botao"> <span>Editar
-							Item</span>
+						<img src="/img/icone-editar.png" class="icone-botao">
+						<span>Editar Item</span>
 
 					</button>
 
 					<button type="button" onclick="removerItemCarrinho()">
 
-						<img src="/img/icone-lixeira-de-reciclagem.png"
-							class="icone-botao"> <span>Remover Item</span>
+						<img src="/img/icone-excluir.png" class="icone-botao">
+						<span>Remover Item</span>
 
 					</button>
 
 					<button type="button" onclick="limparCarrinho()">
 
-						<img src="/img/icone-vassoura.png" class="icone-botao"> <span>Limpar</span>
+						<img src="/img/icone-limpar.png" class="icone-botao">
+						<span>Limpar</span>
 
 					</button>
 
@@ -168,7 +162,6 @@
 
 		</div>
 
-		<!-- Dados escondidos dos itens da venda em edição -->
 		<div id="dadosItensEdicao" style="display: none;"
 			th:if="${modoEdicao}">
 
@@ -185,29 +178,24 @@
 	</main>
 
 	<script th:inline="javascript">
-	/*
-	 * Lista temporária dos itens da venda.
-	 * A venda só será salva no banco ao clicar em Finalizar venda.
-	 */
+
 	let carrinho = [];
 
-	/*
-	 * Guarda o produto selecionado atualmente.
-	 */
 	let produtoAtual = null;
+
 	let modoEdicao = /*[[${modoEdicao != null ? modoEdicao : false}]]*/ false;
+
 	let idVendaEdicao = /*[[${vendaEdicao != null ? vendaEdicao.idVenda : 0}]]*/ 0;
-	
+
 	let clienteEdicao = /*[[${vendaEdicao != null && vendaEdicao.cliente != null ? vendaEdicao.cliente.nome : ''}]]*/ "";
 
-	
-	
-	/*
-	 * Atualiza temporariamente a quantidade exibida na lista de produtos.
-	 * 
-	 * A quantidade exibida considera:
-	 * estoque real do banco - quantidade já adicionada no carrinho.
-	 */
+	function formatarMoeda(valor) {
+
+		return Number(valor)
+			.toFixed(2)
+			.replace(".", ",");
+	}
+
 	function atualizarListaProdutos() {
 
 		const opcoes = document.querySelectorAll("#listaProdutos option");
@@ -235,17 +223,17 @@
 		});
 	}
 
-	/*
-	 * Preenche automaticamente preço e estoque do produto selecionado.
-	 */
 	function preencherProduto() {
+
 		const nomeDigitado = document.getElementById("produtoSelecionado").value;
 		const opcoes = document.querySelectorAll("#listaProdutos option");
 
 		produtoAtual = null;
 
 		opcoes.forEach(function(opcao) {
+
 			if (opcao.value === nomeDigitado) {
+
 				produtoAtual = {
 					id: Number(opcao.getAttribute("data-id")),
 					nome: opcao.getAttribute("data-nome-real"),
@@ -256,14 +244,13 @@
 		});
 
 		if (produtoAtual != null) {
-			document.getElementById("precoProduto").value = produtoAtual.preco.toFixed(2);
+			document.getElementById("precoProduto").value =
+				formatarMoeda(produtoAtual.preco);
 		}
 	}
 
-	/*
-	 * Adiciona produto ao carrinho, validando estoque antes.
-	 */
 	function adicionarAoCarrinho() {
+
 		if (produtoAtual == null) {
 			alert("Selecione um produto válido.");
 			return;
@@ -276,8 +263,11 @@
 			return;
 		}
 
-		const itemExistente = carrinho.find(item => item.idProduto === produtoAtual.id);
-		const quantidadeJaNoCarrinho = itemExistente ? itemExistente.quantidade : 0;
+		const itemExistente =
+			carrinho.find(item => item.idProduto === produtoAtual.id);
+
+		const quantidadeJaNoCarrinho =
+			itemExistente ? itemExistente.quantidade : 0;
 
 		if (quantidadeJaNoCarrinho + quantidade > produtoAtual.estoque) {
 			alert("Estoque insuficiente. Disponível: " + produtoAtual.estoque);
@@ -285,9 +275,13 @@
 		}
 
 		if (itemExistente) {
+
 			itemExistente.quantidade += quantidade;
-			itemExistente.subtotal = itemExistente.quantidade * itemExistente.preco;
+			itemExistente.subtotal =
+				itemExistente.quantidade * itemExistente.preco;
+
 		} else {
+
 			carrinho.push({
 				idProduto: produtoAtual.id,
 				nome: produtoAtual.nome,
@@ -299,54 +293,58 @@
 		}
 
 		atualizarCarrinho();
-		
-		/*
-		 * Limpa os campos do produto para facilitar o próximo lançamento.
-		 */
+
 		document.getElementById("produtoSelecionado").value = "";
 		document.getElementById("precoProduto").value = "";
 		document.getElementById("quantidadeProduto").value = 1;
+
 		produtoAtual = null;
-		
+
 		atualizarListaProdutos();
 	}
 
-	/*
-	 * Atualiza a tabela do carrinho e o total.
-	 */
 	function atualizarCarrinho() {
+
 		const tabela = document.getElementById("tabelaCarrinho");
+
 		tabela.innerHTML = "";
 
 		let total = 0;
 
 		carrinho.forEach(function(item, index) {
+
 			total += item.subtotal;
 
 			tabela.innerHTML += `
 				<tr>
-					<td><input type="radio" name="itemCarrinho" value="${index}"> ${item.nome}</td>
-					<td>R$ ${item.preco.toFixed(2)}</td>
+					<td>
+						<input type="radio" name="itemCarrinho" value="${index}">
+						${item.nome}
+					</td>
 					<td>${item.quantidade}</td>
-					<td>R$ ${item.subtotal.toFixed(2)}</td>
+					<td>R$ ${formatarMoeda(item.preco)}</td>
+					<td>R$ ${formatarMoeda(item.subtotal)}</td>
 				</tr>
 			`;
 		});
 
-		document.getElementById("valorTotal").textContent = total.toFixed(2);
+		document.getElementById("valorTotal").textContent =
+			formatarMoeda(total);
 	}
 
-	 function limparCarrinho() {
+	function limparCarrinho() {
 
-			carrinho = [];
+		carrinho = [];
 
-			atualizarCarrinho();
+		atualizarCarrinho();
 
-			atualizarListaProdutos();
-		}
+		atualizarListaProdutos();
+	}
 
 	function removerItemCarrinho() {
-		const selecionado = document.querySelector("input[name='itemCarrinho']:checked");
+
+		const selecionado =
+			document.querySelector("input[name='itemCarrinho']:checked");
 
 		if (!selecionado) {
 			alert("Selecione um item do carrinho.");
@@ -354,12 +352,16 @@
 		}
 
 		carrinho.splice(Number(selecionado.value), 1);
+
 		atualizarCarrinho();
+
 		atualizarListaProdutos();
 	}
 
 	function editarItemCarrinho() {
-		const selecionado = document.querySelector("input[name='itemCarrinho']:checked");
+
+		const selecionado =
+			document.querySelector("input[name='itemCarrinho']:checked");
 
 		if (!selecionado) {
 			alert("Selecione um item do carrinho.");
@@ -367,34 +369,31 @@
 		}
 
 		const indice = Number(selecionado.value);
+
 		const item = carrinho[indice];
 
-		const novaQuantidade = Number(prompt("Nova quantidade para " + item.nome + ":", item.quantidade));
+		const novaQuantidade =
+			Number(prompt("Nova quantidade para " + item.nome + ":", item.quantidade));
 
 		if (novaQuantidade <= 0) {
 			alert("Quantidade inválida.");
 			return;
 		}
-		
-		/*
-		 * Valida se a nova quantidade ultrapassa o estoque disponível.
-		 */
+
 		if (novaQuantidade > item.estoque) {
-
 			alert("Estoque insuficiente. Disponível: " + item.estoque);
-
 			return;
 		}
 
 		item.quantidade = novaQuantidade;
+
 		item.subtotal = item.quantidade * item.preco;
 
 		atualizarCarrinho();
+
 		atualizarListaProdutos();
 	}
-	/*
-	 * Desabilita o campo de cliente quando a venda for sem cliente.
-	 */
+
 	document.getElementById("vendaSemCliente").addEventListener("change", function() {
 
 		const campoCliente = document.getElementById("clienteSelecionado");
@@ -410,33 +409,28 @@
 		}
 	});
 
-	/*
-	 * Finaliza a venda.
-	 * Envia o carrinho para o backend salvar no banco e baixar o estoque.
-	 */
 	function finalizarVenda() {
 
-		// Verifica se existem itens no carrinho
 		if (carrinho.length === 0) {
 			alert("Adicione pelo menos um produto ao carrinho.");
 			return;
 		}
 
-		// Verifica se a venda será feita sem cliente
-		const vendaSemCliente = document.getElementById("vendaSemCliente").checked;
+		const vendaSemCliente =
+			document.getElementById("vendaSemCliente").checked;
 
 		let clienteId = null;
 
-		/*
-		 * Se NÃO for venda sem cliente,
-		 * tenta encontrar o cliente digitado na lista.
-		 */
 		if (!vendaSemCliente) {
 
-			const nomeCliente = document.getElementById("clienteSelecionado").value;
-			const clientes = document.querySelectorAll("#listaClientes option");
+			const nomeCliente =
+				document.getElementById("clienteSelecionado").value;
+
+			const clientes =
+				document.querySelectorAll("#listaClientes option");
 
 			clientes.forEach(function(cliente) {
+
 				if (cliente.value === nomeCliente) {
 					clienteId = Number(cliente.getAttribute("data-id"));
 				}
@@ -448,7 +442,6 @@
 			}
 		}
 
-		// Monta o objeto que será enviado para o Controller
 		const venda = {
 			clienteId: clienteId,
 			itens: carrinho.map(function(item) {
@@ -459,12 +452,12 @@
 			})
 		};
 
-		// Envia a venda para o backend
-		const urlVenda = modoEdicao
-	? "/vendas/atualizar?id=" + idVendaEdicao
-	: "/vendas/finalizar";
+		const urlVenda =
+			modoEdicao
+				? "/vendas/atualizar?id=" + idVendaEdicao
+				: "/vendas/finalizar";
 
-fetch(urlVenda, {
+		fetch(urlVenda, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json"
@@ -472,7 +465,9 @@ fetch(urlVenda, {
 			body: JSON.stringify(venda)
 		})
 		.then(function(response) {
+
 			return response.text().then(function(mensagem) {
+
 				if (!response.ok) {
 					throw new Error(mensagem);
 				}
@@ -481,14 +476,11 @@ fetch(urlVenda, {
 			});
 		})
 		.then(function(mensagem) {
-			
-			
+
 			alert(mensagem);
 
-			// Limpa o carrinho após finalizar
 			limparCarrinho();
 
-			// Limpa campos da tela
 			document.getElementById("clienteSelecionado").value = "";
 			document.getElementById("produtoSelecionado").value = "";
 			document.getElementById("precoProduto").value = "";
@@ -505,11 +497,7 @@ fetch(urlVenda, {
 			alert("Erro ao finalizar venda: " + erro.message);
 		});
 	}
-	
-	/*
-	 * Mostra a data atual do computador no formato yyyy-MM-dd.
-	 * Usa o horário local, evitando erro de fuso horário.
-	 */
+
 	const hoje = new Date();
 
 	const dataAtual =
@@ -519,107 +507,106 @@ fetch(urlVenda, {
 
 	document.getElementById("dataVenda").value = dataAtual;
 
-	/*
-	 * Impede o usuário de alterar a data manualmente.
-	 */
 	document.getElementById("dataVenda").readOnly = true;
-	// Checkbox venda sem cliente
-	 const checkboxSemCliente = document
-	 	.getElementById("vendaSemCliente");
 
-	 // Campo cliente
-	 const campoCliente = document
-	 	.getElementById("clienteSelecionado");
+	const checkboxSemCliente =
+		document.getElementById("vendaSemCliente");
 
-	 // Quando marcar/desmarcar o checkbox
-	 checkboxSemCliente.addEventListener("change", function() {
+	const campoCliente =
+		document.getElementById("clienteSelecionado");
 
-	 	// Se estiver marcado
-	 	if (this.checked) {
+	checkboxSemCliente.addEventListener("change", function() {
 
-	 		// Remove obrigatoriedade
-	 		campoCliente.removeAttribute("required");
+		if (this.checked) {
 
-	 		// Limpa campo
-	 		campoCliente.value = "";
+			campoCliente.removeAttribute("required");
 
-	 	} else {
+			campoCliente.value = "";
 
-	 		// Campo volta a ser obrigatório
-	 		campoCliente.setAttribute("required", "required");
-	 	}
-	 });
-	 
-	 /*
-	  * Configura a tela quando ela for aberta para edição de venda.
-	  */
+		} else {
 
-	  if (modoEdicao) {
-
-		  document.getElementById("btnFinalizarVenda").innerHTML = `
-				<img src="/img/icone-finalizado.png" class="icone-botao">
-				<span>Salvar Alterações</span>
-			`;
-			document.getElementById("btnVoltarRelatorios").style.display = "grid";
-
-			if (clienteEdicao !== "") {
-				document.getElementById("clienteSelecionado").value = clienteEdicao;
-			} else {
-				document.getElementById("vendaSemCliente").checked = true;
-				document.getElementById("clienteSelecionado").disabled = true;
-			}
-
-			document.querySelectorAll(".item-edicao").forEach(function(item) {
-
-				const idProduto = Number(item.getAttribute("data-id-produto"));
-				const nome = item.getAttribute("data-nome-produto");
-				const preco = Number(item.getAttribute("data-preco"));
-				const quantidade = Number(item.getAttribute("data-quantidade"));
-				const estoque = Number(item.getAttribute("data-estoque"));
-
-				carrinho.push({
-					idProduto: idProduto,
-					nome: nome,
-					preco: preco,
-					estoque: estoque,
-					quantidade: quantidade,
-					subtotal: preco * quantidade
-				});
-			});
-			
-			/*
-			 * Ajusta o estoque original dos produtos que já estavam na venda.
-			 */
-			carrinho.forEach(function(itemCarrinho) {
-
-				const opcoes = document.querySelectorAll("#listaProdutos option");
-
-				opcoes.forEach(function(opcao) {
-
-					const idProduto = Number(opcao.getAttribute("data-id"));
-
-					if (idProduto === itemCarrinho.idProduto) {
-
-						opcao.setAttribute(
-							"data-estoque-original",
-							itemCarrinho.estoque
-						);
-
-						opcao.setAttribute(
-							"data-estoque",
-							itemCarrinho.estoque
-						);
-					}
-				});
-			});
-
-			atualizarCarrinho();
-			atualizarListaProdutos();
-			
-			
+			campoCliente.setAttribute("required", "required");
 		}
-	
-</script>
+	});
+
+	if (modoEdicao) {
+
+		document.getElementById("btnFinalizarVenda").innerHTML = `
+			<img src="/img/icone-finalizar.png" class="icone-botao">
+			<span>Salvar Alterações</span>
+		`;
+
+		document.getElementById("btnVoltarRelatorios").style.display = "grid";
+
+		if (clienteEdicao !== "") {
+
+			document.getElementById("clienteSelecionado").value = clienteEdicao;
+
+		} else {
+
+			document.getElementById("vendaSemCliente").checked = true;
+			document.getElementById("clienteSelecionado").disabled = true;
+		}
+
+		document.querySelectorAll(".item-edicao").forEach(function(item) {
+
+			const idProduto =
+				Number(item.getAttribute("data-id-produto"));
+
+			const nome =
+				item.getAttribute("data-nome-produto");
+
+			const preco =
+				Number(item.getAttribute("data-preco"));
+
+			const quantidade =
+				Number(item.getAttribute("data-quantidade"));
+
+			const estoque =
+				Number(item.getAttribute("data-estoque"));
+
+			carrinho.push({
+				idProduto: idProduto,
+				nome: nome,
+				preco: preco,
+				estoque: estoque,
+				quantidade: quantidade,
+				subtotal: preco * quantidade
+			});
+		});
+
+		carrinho.forEach(function(itemCarrinho) {
+
+			const opcoes =
+				document.querySelectorAll("#listaProdutos option");
+
+			opcoes.forEach(function(opcao) {
+
+				const idProduto =
+					Number(opcao.getAttribute("data-id"));
+
+				if (idProduto === itemCarrinho.idProduto) {
+
+					opcao.setAttribute(
+						"data-estoque-original",
+						itemCarrinho.estoque
+					);
+
+					opcao.setAttribute(
+						"data-estoque",
+						itemCarrinho.estoque
+					);
+				}
+			});
+		});
+
+		atualizarCarrinho();
+
+		atualizarListaProdutos();
+	}
+
+	</script>
+
 </body>
 
 </html>

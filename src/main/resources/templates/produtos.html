@@ -72,7 +72,9 @@
 									<td th:text="${produto.marca != null ? produto.marca : '-'}">
 									</td>
 
-									<td th:text="${produto.preco}"></td>
+									<td
+									th:text="${'R$ ' + #numbers.formatDecimal(produto.preco, 1, 'POINT', 2, 'COMMA')}">
+									</td>
 
 									<td
 										th:text="${produto.validade != null ? produto.validade : '-'}"></td>
@@ -98,7 +100,7 @@
 
 				<a href="/produtos/novo">
 					<button type="button" id="btnCadastrar">
-						<img src="/img/icone-adicionar_produto.png" class="icone-botao">
+						<img src="/img/icone-cadastrar-produto.png" class="icone-botao">
 						<span>Cadastrar</span>
 					</button>
 				</a>
@@ -108,7 +110,7 @@
 				</button>
 
 				<button type="button" id="btnExcluir" onclick="ativarModoExcluir()">
-					<img src="/img/icone-lixeira-de-reciclagem.png" class="icone-botao">
+					<img src="/img/icone-excluir.png" class="icone-botao">
 					<span>Excluir</span>
 				</button>
 
