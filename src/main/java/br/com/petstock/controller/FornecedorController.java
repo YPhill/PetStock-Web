@@ -33,6 +33,8 @@ public class FornecedorController {
         // Envia lista de fornecedores para o HTML
         model.addAttribute("fornecedores", fornecedorService.listarTodos());
 
+        model.addAttribute("paginaAtual", "fornecedores");
+        
         // Abre templates/fornecedores.html
         return "fornecedores";
     }
@@ -45,6 +47,8 @@ public class FornecedorController {
 
         // Cria objeto vazio para preencher no formulário
         model.addAttribute("fornecedor", new Fornecedor());
+        
+        model.addAttribute("paginaAtual", "fornecedores");
 
         // Abre templates/formulario-fornecedor.html
         return "formulario-fornecedor";
@@ -61,6 +65,8 @@ public class FornecedorController {
 
         // Envia fornecedor preenchido para o formulário
         model.addAttribute("fornecedor", fornecedor);
+        
+        model.addAttribute("paginaAtual", "fornecedores");
 
         // Abre o mesmo formulário usado para cadastro
         return "formulario-fornecedor";
@@ -70,13 +76,24 @@ public class FornecedorController {
      * Salva fornecedor novo ou editado.
      */
     @RequestMapping("/salvar")
-    public String salvarFornecedor(Fornecedor fornecedor) {
+    public String salvarFornecedor(Fornecedor fornecedor, Model model) {
 
-        // Salva fornecedor no banco
-        fornecedorService.salvar(fornecedor);
+    	try {
 
-        // Volta para a listagem
-        return "redirect:/fornecedores";
+    		fornecedorService.salvar(fornecedor);
+
+    		return "redirect:/fornecedores";
+
+    	} catch (RuntimeException e) {
+
+    		model.addAttribute("fornecedor", fornecedor);
+
+    		model.addAttribute("erro", e.getMessage());
+    		
+    		model.addAttribute("paginaAtual", "fornecedores");
+
+    		return "formulario-fornecedor";
+    	}
     }
 
     /*
@@ -101,6 +118,9 @@ public class FornecedorController {
             // Envia mensagem amigável para o HTML
             model.addAttribute("erro", "Não é possível excluir fornecedor vinculado a produtos.");
 
+            model.addAttribute("paginaAtual", "fornecedores");
+            
+            
             return "fornecedores";
         }
 

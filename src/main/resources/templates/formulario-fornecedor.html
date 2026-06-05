@@ -17,6 +17,7 @@
 	<div th:replace="~{fragments/header :: header}"></div>
 
 	<main class="conteudo">
+	<p th:if="${erro}" th:text="${erro}" class="mensagem-erro"></p>
 
 		<h1>Cadastrar Fornecedor</h1>
 

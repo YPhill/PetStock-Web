@@ -230,3 +230,11 @@
 	object-fit: contain;
 	justify-self: center;
 }
+
+/* Cabeçalho fixo da tabela */
+.tabela-scroll thead th {
+	position: sticky;
+	top: 0;
+	z-index: 2;
+	background-color: #8b6b4f;
+}

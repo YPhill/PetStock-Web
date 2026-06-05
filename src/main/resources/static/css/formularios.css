@@ -121,3 +121,9 @@ form button:hover {
     background-color: #8d6037;
 }
 
+.mensagem-erro {
+	color: #b30000;
+	font-weight: bold;
+	margin-bottom: 18px;
+}
+

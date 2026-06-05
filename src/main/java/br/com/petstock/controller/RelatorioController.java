@@ -40,6 +40,8 @@ public class RelatorioController {
 
 		// Envia clientes para o filtro pesquisável
 		model.addAttribute("clientes", clienteService.listarTodos());
+		
+		model.addAttribute("paginaAtual", "relatorios");
 
 		// Abre templates/relatorios.html
 		return "relatorios";

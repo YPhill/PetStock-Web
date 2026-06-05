@@ -33,6 +33,8 @@ public class ProdutoController {
 	public String listarProdutos(Model model) {
 
 		model.addAttribute("produtos", produtoService.listarTodos());
+		
+		model.addAttribute("paginaAtual", "produtos");
 
 		return "produtos";
 	}
@@ -50,6 +52,8 @@ public class ProdutoController {
 
 		model.addAttribute("produto", produto);
 		model.addAttribute("fornecedores", fornecedorService.listarTodos());
+		
+		model.addAttribute("paginaAtual", "produtos");
 
 		return "formulario-produto";
 	}
@@ -68,6 +72,8 @@ public class ProdutoController {
 
 		model.addAttribute("produto", produto);
 		model.addAttribute("fornecedores", fornecedorService.listarTodos());
+		
+		model.addAttribute("paginaAtual", "produtos");
 
 		return "formulario-produto";
 	}
@@ -76,11 +82,30 @@ public class ProdutoController {
 	 * Salva produto novo ou editado.
 	 */
 	@RequestMapping("/salvar")
-	public String salvarProduto(Produto produto) {
+	public String salvarProduto(Produto produto, Model model) {
 
-		produtoService.salvar(produto);
+		try {
 
-		return "redirect:/produtos";
+			produtoService.salvar(produto);
+
+			return "redirect:/produtos";
+
+		} catch (RuntimeException e) {
+
+			if (produto.getFornecedor() == null) {
+				produto.setFornecedor(new Fornecedor());
+			}
+
+			model.addAttribute("produto", produto);
+
+			model.addAttribute("fornecedores", fornecedorService.listarTodos());
+
+			model.addAttribute("erro", e.getMessage());
+			
+			model.addAttribute("paginaAtual", "produtos");
+
+			return "formulario-produto";
+		}
 	}
 
 	/*
@@ -96,6 +121,8 @@ public class ProdutoController {
 
 			model.addAttribute("produtos", produtoService.listarTodos());
 			model.addAttribute("erro", "Não é possível excluir produto vinculado ao estoque ou vendas.");
+			
+			model.addAttribute("paginaAtual", "produtos");
 
 			return "produtos";
 		}

@@ -58,6 +58,8 @@ public class VendaController {
 
 		// Envia produtos para o campo de seleção/pesquisa da venda
 		model.addAttribute("produtos", produtoService.listarTodos());
+		
+		model.addAttribute("paginaAtual", "vendas");
 
 		// Abre templates/vendas.html
 		return "vendas";
@@ -84,6 +86,8 @@ public class VendaController {
 
 		// Indica para o HTML que a tela está em modo edição
 		model.addAttribute("modoEdicao", true);
+		
+		model.addAttribute("paginaAtual", "vendas");
 
 		return "vendas";
 	}

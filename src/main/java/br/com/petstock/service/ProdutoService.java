@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import br.com.petstock.model.Estoque;
 import br.com.petstock.model.Produto;
 import br.com.petstock.repository.ProdutoRepository;
+import java.time.LocalDate;
 
 /*
  * Service responsável pelas regras de negócio de Produto.
@@ -53,6 +54,15 @@ public class ProdutoService {
 		 */
 		if (produto.getPreco().compareTo(BigDecimal.ZERO) <= 0) {
 			throw new RuntimeException("O preço do produto deve ser maior que zero.");
+		}
+		
+		/*
+		 * Valida se a validade não é uma data anterior à data atual.
+		 */
+		if (produto.getValidade() != null
+				&& produto.getValidade().isBefore(LocalDate.now())) {
+
+			throw new RuntimeException("A validade do produto não pode ser anterior à data atual.");
 		}
 
 		/*

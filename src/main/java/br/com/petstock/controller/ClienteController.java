@@ -33,7 +33,8 @@ public class ClienteController {
 	public String listarClientes(Model model) {
 
 		model.addAttribute("clientes", clienteService.listarTodos());
-		
+
+		model.addAttribute("paginaAtual", "clientes");
 
 		return "clientes";
 	}
@@ -49,6 +50,8 @@ public class ClienteController {
 		// Guarda de onde o usuário veio
 		model.addAttribute("origem", origem);
 
+		model.addAttribute("paginaAtual", "clientes");
+		
 		return "formulario-cliente";
 	}
 
@@ -61,6 +64,8 @@ public class ClienteController {
 		Cliente cliente = clienteService.buscarPorId(id);
 
 		model.addAttribute("cliente", cliente);
+		
+		model.addAttribute("paginaAtual", "clientes");
 
 		return "formulario-cliente";
 	}
@@ -69,40 +74,57 @@ public class ClienteController {
 	 * Salva cliente novo ou editado.
 	 */
 	@PostMapping("/clientes/salvar")
-	public String salvarCliente(Cliente cliente,
-			@RequestParam(value = "origem", required = false) String origem) {
+	public String salvarCliente(Cliente cliente, @RequestParam(value = "origem", required = false) String origem,
+			Model model) {
 
-		clienteService.salvar(cliente);
+		try {
 
-		// Se veio da tela de vendas, volta para vendas
-		if ("vendas".equals(origem)) {
-			return "redirect:/vendas";
+			clienteService.salvar(cliente);
+
+			// Se veio da tela de vendas, volta para vendas
+			if ("vendas".equals(origem)) {
+				return "redirect:/vendas";
+			}
+
+			return "redirect:/clientes";
+
+		} catch (RuntimeException e) {
+
+			// Mantém os dados digitados no formulário
+			model.addAttribute("cliente", cliente);
+
+			// Mantém a origem, caso tenha vindo da tela de vendas
+			model.addAttribute("origem", origem);
+
+			// Envia a mensagem de erro para o HTML
+			model.addAttribute("erro", e.getMessage());
+
+			model.addAttribute("paginaAtual", "clientes");
+			
+			return "formulario-cliente";
 		}
-
-		return "redirect:/clientes";
 	}
 
 	/*
 	 * Exclui vários clientes selecionados.
 	 */
 	@PostMapping("/clientes/excluir")
-	public String excluirClientes(
-	        @RequestParam("idsSelecionados") List<Integer> idsSelecionados,
-	        Model model) {
+	public String excluirClientes(@RequestParam("idsSelecionados") List<Integer> idsSelecionados, Model model) {
 
-	    try {
-	        clienteService.excluirSelecionados(idsSelecionados);
+		try {
+			clienteService.excluirSelecionados(idsSelecionados);
 
-	    } catch (Exception e) {
+		} catch (Exception e) {
 
-	        model.addAttribute("clientes", clienteService.listarTodos());
-	        model.addAttribute("erro", "Não é possível excluir cliente vinculado a uma venda.");
+			model.addAttribute("clientes", clienteService.listarTodos());
+			model.addAttribute("erro", "Não é possível excluir cliente vinculado a uma venda.");
 
-	        return "clientes";
-	    }
+			model.addAttribute("paginaAtual", "clientes");
+			
+			return "clientes";
+		}
 
-	    return "redirect:/clientes";
+		return "redirect:/clientes";
 	}
-	
-	
-	}
+
+}

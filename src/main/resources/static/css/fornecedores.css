@@ -133,3 +133,13 @@
 .tabela-scroll tbody tr:hover {
     background-color: #f8f2ec;
 }
+
+
+
+/* Cabeçalho fixo da tabela */
+.tabela-scroll thead th {
+	position: sticky;
+	top: 0;
+	z-index: 2;
+	background-color: #8b6b4f;
+}

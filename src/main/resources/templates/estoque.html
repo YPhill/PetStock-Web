@@ -45,7 +45,6 @@
 								<th>Categoria</th>
 								<th>Marca</th>
 								<th>Quantidade Atual</th>
-								<th>Status</th>
 							</tr>
 						</thead>
 
@@ -74,9 +73,7 @@
 
 								<td th:text="${estoque.quantidadeAtual}"></td>
 
-								<td
-									th:text="${estoque.quantidadeAtual == 0 ? '🔴 Sem estoque' : (estoque.quantidadeAtual <= 10 ? '🟡 Baixo' : '🟢 Normal')}">
-								</td>
+
 
 							</tr>
 

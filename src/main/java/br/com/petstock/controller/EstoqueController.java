@@ -31,6 +31,8 @@ public class EstoqueController {
 		// Envia todos os registros de estoque para o HTML
 		model.addAttribute("estoques", estoqueService.listarTodos());
 		
+		model.addAttribute("paginaAtual", "estoque");
+		
 
 		// Abre templates/estoque.html
 		return "estoque";
@@ -54,6 +56,8 @@ public class EstoqueController {
 
 			// Envia mensagem de erro amigável
 			model.addAttribute("erro", e.getMessage());
+			
+			model.addAttribute("paginaAtual", "estoque");
 
 			return "estoque";
 		}
@@ -80,6 +84,8 @@ public class EstoqueController {
 
 			// Envia mensagem de erro amigável
 			model.addAttribute("erro", e.getMessage());
+			
+			model.addAttribute("paginaAtual", "estoque");
 
 			return "estoque";
 		}
@@ -107,6 +113,8 @@ public class EstoqueController {
 
 			// Envia mensagem de erro amigável
 			model.addAttribute("erro", e.getMessage());
+			
+			model.addAttribute("paginaAtual", "estoque");
 
 			return "estoque";
 		}
